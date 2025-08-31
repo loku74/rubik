@@ -7,7 +7,8 @@ def randomCube():
     cube = Cube()
     k = 0
     moves = []
-    while k < 30:
+    max_moves = 20
+    while k < max_moves:
         move = cube.randomMove()
         moves.append(move)
         k += 1

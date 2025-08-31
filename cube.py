@@ -114,23 +114,24 @@ class Cube:
     def display(self):
         print(self.format())
 
+    def rotate(self, color: int, k: int):
+        temp = np.reshape(self.cube[color], (3, 3))
+        temp = np.rot90(temp, k=k)
+        self.cube[color] = temp.flatten()
+
     def U(self):
         pieces = [0, 1, 2]
         self.swap(self.RED, self.BLUE, pieces)
         self.swap(self.RED, self.ORANGE, pieces)
         self.swap(self.RED, self.GREEN, pieces)
-        temp = np.reshape(self.cube[self.YELLOW], (3, 3))
-        temp = np.rot90(temp, k=-1)
-        self.cube[self.YELLOW] = temp.flatten()
+        self.rotate(self.YELLOW, k=-1)
 
     def Ui(self):
         pieces = [0, 1, 2]
         self.swap(self.RED, self.GREEN, pieces)
         self.swap(self.RED, self.ORANGE, pieces)
         self.swap(self.RED, self.BLUE, pieces)
-        temp = np.reshape(self.cube[self.YELLOW], (3, 3))
-        temp = np.rot90(temp, k=1)
-        self.cube[self.YELLOW] = temp.flatten()
+        self.rotate(self.YELLOW, k=1)
 
     def U2(self):
         self.U()
@@ -141,18 +142,14 @@ class Cube:
         self.swap(self.RED, self.GREEN, pieces)
         self.swap(self.RED, self.ORANGE, pieces)
         self.swap(self.RED, self.BLUE, pieces)
-        temp = np.reshape(self.cube[self.WHITE], (3, 3))
-        temp = np.rot90(temp, k=-1)
-        self.cube[self.WHITE] = temp.flatten()
+        self.rotate(self.WHITE, k=-1)
 
     def Di(self):
         pieces = [6, 7, 8]
         self.swap(self.RED, self.BLUE, pieces)
         self.swap(self.RED, self.ORANGE, pieces)
         self.swap(self.RED, self.GREEN, pieces)
-        temp = np.reshape(self.cube[self.WHITE], (3, 3))
-        temp = np.rot90(temp, k=1)
-        self.cube[self.WHITE] = temp.flatten()
+        self.rotate(self.WHITE, k=1)
 
     def D2(self):
         self.D()
@@ -163,18 +160,14 @@ class Cube:
         self.swap(self.BLUE, self.YELLOW, pieces)
         self.swap(self.BLUE, self.GREEN, pieces[::-1], to=[0, 3, 6])
         self.swap(self.BLUE, self.WHITE, pieces)
-        temp = np.reshape(self.cube[self.RED], (3, 3))
-        temp = np.rot90(temp, k=-1)
-        self.cube[self.RED] = temp.flatten()
+        self.rotate(self.RED, k=-1)
 
     def Ri(self):
         pieces = [2, 5, 8]
         self.swap(self.BLUE, self.WHITE, pieces)
         self.swap(self.BLUE, self.GREEN, pieces[::-1], to=[0, 3, 6])
         self.swap(self.BLUE, self.YELLOW, pieces)
-        temp = np.reshape(self.cube[self.RED], (3, 3))
-        temp = np.rot90(temp, k=1)
-        self.cube[self.RED] = temp.flatten()
+        self.rotate(self.RED, k=1)
 
     def R2(self):
         self.R()
@@ -185,18 +178,14 @@ class Cube:
         self.swap(self.BLUE, self.WHITE, pieces)
         self.swap(self.BLUE, self.GREEN, pieces[::-1], to=[2, 5, 8])
         self.swap(self.BLUE, self.YELLOW, pieces)
-        temp = np.reshape(self.cube[self.ORANGE], (3, 3))
-        temp = np.rot90(temp, k=-1)
-        self.cube[self.ORANGE] = temp.flatten()
+        self.rotate(self.ORANGE, k=-1)
 
     def Li(self):
         pieces = [0, 3, 6]
         self.swap(self.BLUE, self.YELLOW, pieces)
         self.swap(self.BLUE, self.GREEN, pieces[::-1], to=[2, 5, 8])
         self.swap(self.BLUE, self.WHITE, pieces)
-        temp = np.reshape(self.cube[self.ORANGE], (3, 3))
-        temp = np.rot90(temp, k=1)
-        self.cube[self.ORANGE] = temp.flatten()
+        self.rotate(self.ORANGE, k=1)
 
     def L2(self):
         self.L()
@@ -206,17 +195,13 @@ class Cube:
         self.swap(self.YELLOW, self.RED, [6, 7, 8], to=[0, 3, 6])
         self.swap(self.YELLOW, self.WHITE, [6, 7, 8], to=[2, 1, 0])
         self.swap(self.YELLOW, self.ORANGE, [6, 7, 8], to=[8, 5, 2])
-        temp = np.reshape(self.cube[self.BLUE], (3, 3))
-        temp = np.rot90(temp, k=-1)
-        self.cube[self.BLUE] = temp.flatten()
+        self.rotate(self.BLUE, k=-1)
 
     def Fi(self):
         self.swap(self.YELLOW, self.ORANGE, [6, 7, 8], to=[8, 5, 2])
         self.swap(self.YELLOW, self.WHITE, [6, 7, 8], to=[2, 1, 0])
         self.swap(self.YELLOW, self.RED, [6, 7, 8], to=[0, 3, 6])
-        temp = np.reshape(self.cube[self.BLUE], (3, 3))
-        temp = np.rot90(temp, k=1)
-        self.cube[self.BLUE] = temp.flatten()
+        self.rotate(self.BLUE, k=1)
 
     def F2(self):
         self.F()
@@ -226,17 +211,13 @@ class Cube:
         self.swap(self.YELLOW, self.ORANGE, [0, 1, 2], to=[6, 3, 0])
         self.swap(self.YELLOW, self.WHITE, [0, 1, 2], to=[8, 7, 6])
         self.swap(self.YELLOW, self.RED, [0, 1, 2], to=[2, 5, 8])
-        temp = np.reshape(self.cube[self.GREEN], (3, 3))
-        temp = np.rot90(temp, k=-1)
-        self.cube[self.GREEN] = temp.flatten()
+        self.rotate(self.GREEN, k=-1)
 
     def Bi(self):
         self.swap(self.YELLOW, self.RED, [0, 1, 2], to=[2, 5, 8])
         self.swap(self.YELLOW, self.WHITE, [0, 1, 2], to=[8, 7, 6])
         self.swap(self.YELLOW, self.ORANGE, [0, 1, 2], to=[6, 3, 0])
-        temp = np.reshape(self.cube[self.GREEN], (3, 3))
-        temp = np.rot90(temp, k=1)
-        self.cube[self.GREEN] = temp.flatten()
+        self.rotate(self.GREEN, k=1)
 
     def B2(self):
         self.B()
