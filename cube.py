@@ -42,14 +42,18 @@ class Cube:
         str += "\n" + " " * 11 + "-" * 8 + "\n"
 
         for k in range(3):
-            for face in [
-                self.cube[self.ORANGE],
-                self.cube[self.YELLOW],
-                self.cube[self.RED],
-            ]:
+            for index, face in enumerate(
+                [
+                    self.cube[self.ORANGE],
+                    self.cube[self.YELLOW],
+                    self.cube[self.RED],
+                ]
+            ):
                 str += face[k * 3] + " "
                 str += face[1 + k * 3] + " "
-                str += face[2 + k * 3] + " | "
+                str += face[2 + k * 3]
+                if index != 2:
+                    str += " | "
             str += "\n"
 
         str += " " * 11 + "-" * 8 + "\n"
