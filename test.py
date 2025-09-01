@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from cube import Cube
+from f2l import is_f2l_valid
 
 
 def randomCube():
@@ -86,7 +87,7 @@ def solve_white_cross(cube: Cube):
     return cube, final_list, test
 
 
-while True:
+def test_white_cross():
     cube, moves = randomCube()
     _, solved_moves, test = solve_white_cross(cube)
     print(cube)
@@ -95,3 +96,15 @@ while True:
     print("Tests:", test)
     str = "-" * 35
     print(str)
+
+
+def test_f2l():
+    cube, moves = randomCube()
+    solved_cube, solved_moves, _ = solve_white_cross(cube)
+    print(solved_cube)
+    print("Shuffle moves:", moves)
+    print("Solved moves:", solved_moves, len(solved_moves))
+    print(is_f2l_valid(solved_cube))
+
+
+test_f2l()
