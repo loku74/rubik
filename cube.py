@@ -13,20 +13,12 @@ class Cube:
 
     def __init__(self):
         self.cube = {
-            self.WHITE: np.array(
-                ["W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8", "W9"]
-            ),
-            self.YELLOW: np.array(
-                ["Y1", "Y2", "Y3", "Y4", "Y5", "Y6", "Y7", "Y8", "Y9"]
-            ),
-            self.RED: np.array(["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9"]),
-            self.GREEN: np.array(
-                ["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9"]
-            ),
-            self.BLUE: np.array(["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9"]),
-            self.ORANGE: np.array(
-                ["O1", "O2", "O3", "O4", "O5", "O6", "O7", "O8", "O9"]
-            ),
+            self.WHITE: np.array(["W", "W", "W", "W", "W", "W", "W", "W", "W"]),
+            self.YELLOW: np.array(["Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"]),
+            self.RED: np.array(["R", "R", "R", "R", "R", "R", "R", "R", "R"]),
+            self.GREEN: np.array(["G", "G", "G", "G", "G", "G", "G", "G", "G"]),
+            self.BLUE: np.array(["B", "B", "B", "B", "B", "B", "B", "B", "B"]),
+            self.ORANGE: np.array(["O", "O", "O", "O", "O", "O", "O", "O", "O"]),
         }
         self.previous = None
         self.y = 0
@@ -63,13 +55,13 @@ class Cube:
         for index, piece in enumerate(self.cube[self.BLUE]):
             str = add(str, index, piece, space=True)
         if colors:
-            for k in range(1, 10):
-                str = str.replace(f"W{k}", "⬜️")
-                str = str.replace(f"Y{k}", "🟨")
-                str = str.replace(f"R{k}", "🟥")
-                str = str.replace(f"G{k}", "🟩")
-                str = str.replace(f"B{k}", "🟦")
-                str = str.replace(f"O{k}", "🟧")
+            for _ in range(10):
+                str = str.replace("W", "⬜️")
+                str = str.replace("Y", "🟨")
+                str = str.replace("R", "🟥")
+                str = str.replace("G", "🟩")
+                str = str.replace("B", "🟦")
+                str = str.replace("O", "🟧")
         return str
 
     def swap(

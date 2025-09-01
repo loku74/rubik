@@ -23,10 +23,10 @@ def solve_white_cross(cube: Cube):
         yellow_pieces = [yellow_side[1], yellow_side[3], yellow_side[5], yellow_side[7]]
         sum = 0
         for piece in white_pieces:
-            if piece[0] == "W":
+            if piece == "W":
                 sum += 1
         for piece in yellow_pieces:
-            if piece[0] == "W":
+            if piece == "W":
                 sum += 1
         return sum == 4
 
@@ -38,15 +38,15 @@ def solve_white_cross(cube: Cube):
         white_side = cube.cube[cube.WHITE]
         white_pieces = [white_side[1], white_side[3], white_side[5], white_side[7]]
         for piece in white_pieces:
-            if piece[0] != "W":
+            if piece != "W":
                 return False
-        if blue_side[7][0] != "B":
+        if blue_side[7] != "B":
             return False
-        if red_side[7][0] != "R":
+        if red_side[7] != "R":
             return False
-        if green_side[7][0] != "G":
+        if green_side[7] != "G":
             return False
-        if orange_side[7][0] != "O":
+        if orange_side[7] != "O":
             return False
         return True
 
