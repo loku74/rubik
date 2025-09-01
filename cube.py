@@ -30,7 +30,7 @@ class Cube:
                 if index != 0:
                     str += "\n"
                 if space:
-                    str += " " * 9
+                    str += " " * 11
                 str += piece + " "
             else:
                 str += piece + " "
@@ -39,21 +39,30 @@ class Cube:
         str = ""
         for index, piece in enumerate(self.cube[self.GREEN]):
             str = add(str, index, piece, space=True)
-        str += "\n"
+        str += "\n" + " " * 11 + "-" * 8 + "\n"
+
         for k in range(3):
             for face in [
                 self.cube[self.ORANGE],
-                self.cube[self.WHITE],
-                self.cube[self.RED],
                 self.cube[self.YELLOW],
+                self.cube[self.RED],
             ]:
                 str += face[k * 3] + " "
                 str += face[1 + k * 3] + " "
-                str += face[2 + k * 3] + " "
+                str += face[2 + k * 3] + " | "
             str += "\n"
+
+        str += " " * 11 + "-" * 8 + "\n"
 
         for index, piece in enumerate(self.cube[self.BLUE]):
             str = add(str, index, piece, space=True)
+
+        str += "\n"
+        str += " " * 11 + "-" * 8 + "\n"
+
+        for index, piece in enumerate(self.cube[self.WHITE]):
+            str = add(str, index, piece, space=True)
+
         if colors:
             for _ in range(10):
                 str = str.replace("W", "⬜️")
