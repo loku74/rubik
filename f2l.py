@@ -26,10 +26,10 @@ def is_f2l_valid(cube: Cube):
             top_color = cube.cube[Cube.YELLOW][index]
             edge_face_index = top_edges_dict[index]
             edge_color = cube.cube[edge_face_index][1]
-            edge = [str(top_color), str(edge_color)]
+            edge = str(top_color + edge_color)
             if "Y" not in edge:
-                edge.sort()
-                edge_list.append(tuple(edge))
+                edge = "".join(sorted(edge))
+                edge_list.append(edge)
 
         return edge_list
 
@@ -46,11 +46,11 @@ def is_f2l_valid(cube: Cube):
             corner_face_index_2 = top_corners_dict[top_index][1]
             corner_color_2 = cube.cube[corner_face_index_2][side_index_2]
 
-            corner_colors = [str(top_color), str(corner_color_1), str(corner_color_2)]
+            corner_colors = str(top_color + corner_color_1 + corner_color_2)
             if "W" in corner_colors:
-                corner_colors.remove("W")
-                corner_colors.sort()
-                corner_list.append(tuple(corner_colors))
+                corner_colors = corner_colors.replace("W", "")
+                corner_colors = "".join(sorted(corner_colors))
+                corner_list.append(corner_colors)
 
         return corner_list
 
