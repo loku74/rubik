@@ -21,8 +21,6 @@ class Cube:
             self.ORANGE: np.array(["O", "O", "O", "O", "O", "O", "O", "O", "O"]),
         }
         self.previous = None
-        self.y = 0
-        self.x = 0
 
     def format(self, colors=False):
         def add(str, index, piece, space=False):
@@ -260,3 +258,78 @@ class Cube:
         func = choices(set)[0]
         func()
         return func.__name__
+
+    def move(self, moves=[]):
+        move_dict = {
+            "R": self.R(),
+            "R'": self.Ri(),
+            "R2": self.R2(),
+            "L": self.L(),
+            "L'": self.Li(),
+            "L2": self.L2(),
+            "F": self.F(),
+            "F'": self.Fi(),
+            "F2": self.F2(),
+            "B": self.B(),
+            "B'": self.Bi(),
+            "B2": self.B2(),
+            "U": self.U(),
+            "U'": self.Ui(),
+            "U2": self.U2(),
+            "D": self.D(),
+            "D'": self.Di(),
+            "D2": self.D2(),
+        }
+        for move in moves:
+            func = move_dict[move]
+            func()
+
+    def translateY(self, moves=[]):
+        y_dict = {
+            1: {
+                "R": "B",
+                "R'": "B'",
+                "L": "F",
+                "L'": "L",
+                "F": "R",
+                "F'": "R'",
+                "B": "L",
+                "B'": "L'",
+            },
+            2: {
+                "R": "L",
+                "R'": "L'",
+                "L": "R",
+                "L'": "R'",
+                "F": "B",
+                "F'": "B'",
+                "B": "F",
+                "B'": "F'",
+            },
+            3: {
+                "R": "F",
+                "R'": "F'",
+                "L": "B",
+                "L'": "B'",
+                "F": "L",
+                "F'": "F'",
+                "B": "R",
+                "B'": "R'",
+            },
+        }
+        y = 0
+        final_moves = []
+        for move in moves:
+            if move.contains("y"):
+                match move:
+                    case "y":
+                        y += 1
+                    case "y'":
+                        y += 3
+                    case "y2":
+                        y += 2
+
+            elif y % 4:
+                final_moves.append(y_dict[y % 4][move])
+            else:
+                final_moves.append(move)
