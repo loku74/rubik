@@ -2,6 +2,8 @@ from random import choices
 
 import numpy as np
 
+from utils import y_dict
+
 
 class Cube:
     WHITE = 0
@@ -285,38 +287,6 @@ class Cube:
             func()
 
     def translateY(self, moves=[]):
-        y_dict = {
-            1: {
-                "R": "B",
-                "R'": "B'",
-                "L": "F",
-                "L'": "L",
-                "F": "R",
-                "F'": "R'",
-                "B": "L",
-                "B'": "L'",
-            },
-            2: {
-                "R": "L",
-                "R'": "L'",
-                "L": "R",
-                "L'": "R'",
-                "F": "B",
-                "F'": "B'",
-                "B": "F",
-                "B'": "F'",
-            },
-            3: {
-                "R": "F",
-                "R'": "F'",
-                "L": "B",
-                "L'": "B'",
-                "F": "L",
-                "F'": "F'",
-                "B": "R",
-                "B'": "R'",
-            },
-        }
         y = 0
         final_moves = []
         for move in moves:
@@ -333,3 +303,5 @@ class Cube:
                 final_moves.append(y_dict[y % 4][move])
             else:
                 final_moves.append(move)
+
+        return final_moves
