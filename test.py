@@ -104,9 +104,9 @@ def test_f2l():
     print(solved_cube)
     print("Shuffle moves:", moves)
     print("Solved moves:", solved_moves, len(solved_moves))
-    edge_pairs, top_pairs = is_f2l_valid(solved_cube)
+    edge_pairs, corner_pairs = is_f2l_valid(solved_cube)
     print("Edge pairs:", edge_pairs)
-    print("Top pairs:", top_pairs)
+    print("Corner pairs:", corner_pairs)
 
 
 test_f2l()
