@@ -228,9 +228,6 @@ class Cube:
         self.B()
         self.B()
 
-    # def move(self, str: string):
-    #     moves = str.split()
-
     def randomMove(self, cross=False):
         func_set_list = [
             [self.B, self.Bi, self.B2],
@@ -261,31 +258,6 @@ class Cube:
         func()
         return func.__name__
 
-    def move(self, moves=[]):
-        move_dict = {
-            "R": self.R(),
-            "R'": self.Ri(),
-            "R2": self.R2(),
-            "L": self.L(),
-            "L'": self.Li(),
-            "L2": self.L2(),
-            "F": self.F(),
-            "F'": self.Fi(),
-            "F2": self.F2(),
-            "B": self.B(),
-            "B'": self.Bi(),
-            "B2": self.B2(),
-            "U": self.U(),
-            "U'": self.Ui(),
-            "U2": self.U2(),
-            "D": self.D(),
-            "D'": self.Di(),
-            "D2": self.D2(),
-        }
-        for move in moves:
-            func = move_dict[move]
-            func()
-
     def translateY(self, moves=[]):
         y = 0
         final_moves = []
@@ -305,3 +277,39 @@ class Cube:
                 final_moves.append(move)
 
         return final_moves
+
+    def move(self, moves=[]):
+        def check_y():
+            y_list = ["y", "y'", "y2"]
+            for y in y_list:
+                if y in moves:
+                    return True
+            return False
+
+        move_dict = {
+            "R": self.R,
+            "R'": self.Ri,
+            "R2": self.R2,
+            "L": self.L,
+            "L'": self.Li,
+            "L2": self.L2,
+            "F": self.F,
+            "F'": self.Fi,
+            "F2": self.F2,
+            "B": self.B,
+            "B'": self.Bi,
+            "B2": self.B2,
+            "U": self.U,
+            "U'": self.Ui,
+            "U2": self.U2,
+            "D": self.D,
+            "D'": self.Di,
+            "D2": self.D2,
+        }
+
+        if check_y():
+            moves = self.translateY(moves)
+
+        for move in moves:
+            func = move_dict[move]
+            func()
