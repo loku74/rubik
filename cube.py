@@ -262,7 +262,7 @@ class Cube:
         y = 0
         final_moves = []
         for move in moves:
-            if move.contains("y"):
+            if "y" in move:
                 match move:
                     case "y":
                         y += 1
