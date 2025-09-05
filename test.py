@@ -1,4 +1,5 @@
 import f2l
+import oll
 from cube import Cube
 from solve import solve_white_cross
 
@@ -33,7 +34,11 @@ def test_f2l():
     print("Shuffle moves:", moves)
     print("Solved moves:", solved_moves, len(solved_moves))
     f2l_moves = f2l.solve(solved_cube)
-    print("F2L moves:", f2l_moves, len(f2l_moves))
+    print("F2L moves:", f2l_moves)
+    print(solved_cube)
+    oll_moves = oll.solve(solved_cube)
+    print("OLL moves:", oll_moves)
+    solved_cube.move(oll_moves)
     print(solved_cube)
 
 
