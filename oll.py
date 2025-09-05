@@ -18,9 +18,8 @@ def solve(cube: Cube):
         for move in ["U", "U'", "U2"]:
             saved_cube = deepcopy(cube)
             saved_cube.move([move])
-            saved_cube.move(oll)
+            oll_solve_moves = saved_cube.move(oll)
             if is_solved(saved_cube):
-                oll_solve = [move] + oll
-                return oll_solve
+                return [move] + oll_solve_moves
 
     return None
