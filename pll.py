@@ -30,18 +30,20 @@ def solve(cube: Cube):
     pll_moves = json.loads(open("./algorithms/PLL.json").read())
     pll_moves = [pll.split(" ") for pll in pll_moves]
 
-    reverse_move = {"U": "U'", "U'": "U", "U2": "U2"}
-
     for pll in pll_moves:
-        for move in ["U", "U'", "U2"]:
+        saved_cube = deepcopy(cube)
+        pll_solve_moves = saved_cube.move(pll)
+        if is_solved(saved_cube):
+            return pll_solve_moves
+        for y in ["y", "y'", "y2"]:
             saved_cube = deepcopy(cube)
-            saved_cube.move([move])
-            pll_solve_moves = saved_cube.move(pll)
+            pll_solve_moves = saved_cube.move([y] + pll)
             if is_solved(saved_cube):
-                return [move] + pll_solve_moves
-            else:
-                saved_cube.move([reverse_move[move]])
+                return pll_solve_moves
+            for move in ["U", "U'", "U2"]:
+                saved_cube = deepcopy(cube)
+                pll_solve_moves = saved_cube.move([y] + pll + [move])
                 if is_solved(saved_cube):
-                    return [move] + pll_solve_moves + [reverse_move[move]]
+                    return pll_solve_moves
 
     return None

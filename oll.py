@@ -19,11 +19,10 @@ def solve(cube: Cube):
         oll_solve_moves = saved_cube.move(oll)
         if is_solved(saved_cube):
             return oll_solve_moves
-        for move in ["U", "U'", "U2"]:
+        for move in ["y", "y'", "y2"]:
             saved_cube = deepcopy(cube)
-            saved_cube.move([move])
-            oll_solve_moves = saved_cube.move(oll)
+            oll_solve_moves = saved_cube.move([move] + oll)
             if is_solved(saved_cube):
-                return [move] + oll_solve_moves
+                return oll_solve_moves
 
     return None
