@@ -27,6 +27,12 @@ top_corners_dict = {
     8: [Cube.RED, Cube.BLUE],
     6: [Cube.BLUE, Cube.ORANGE],
 }
+pair_dict = {
+    "GO": 0,
+    "GR": 2,
+    "BR": 8,
+    "BO": 6,
+}
 
 
 def get_top_side_pairs(cube: Cube):
@@ -126,25 +132,19 @@ def solve_f2l_top(cube: Cube, pair: str):
     return None
 
 
+def set_corner(corner: CornerPair, cube: Cube):
+    print("setting corner", corner.pair)
+    for move in ["U", "U'", "U2"]:
+        saved_cube = deepcopy(cube)
+        saved_cube.move([move])
+        _, corners = get_top_side_pairs(saved_cube)
+        for c in corners:
+            if c.pair == corner.pair and c.index == pair_dict[corner.pair]:
+                return move
+    return None
+
+
 def solve(cube: Cube):
-    pair_dict = {
-        "GO": 0,
-        "GR": 2,
-        "BR": 8,
-        "BO": 6,
-    }
-
-    def set_corner(corner, cube):
-        print("setting corner", corner.pair)
-        for move in ["U", "U'", "U2"]:
-            saved_cube = deepcopy(cube)
-            saved_cube.move([move])
-            _, corners = get_top_side_pairs(saved_cube)
-            for c in corners:
-                if c.pair == corner.pair and c.index == pair_dict[corner.pair]:
-                    return move
-        return None
-
     move_list = []
 
     edge_pairs, corner_pairs = get_top_side_pairs(cube)
@@ -175,15 +175,10 @@ def solve(cube: Cube):
                 if move:
                     cube.move([move])
                     move_list.append(move)
-                f2l_moves = solve_f2l_top(cube, corner.pair)
-                if f2l_moves:
-                    move_list.extend(f2l_moves)
-                    cube.move(f2l_moves)
-            else:
-                f2l_moves = solve_f2l_top(cube, corner.pair)
-                if f2l_moves:
-                    move_list.extend(f2l_moves)
-                    cube.move(f2l_moves)
+            f2l_moves = solve_f2l_top(cube, corner.pair)
+            if f2l_moves:
+                move_list.extend(f2l_moves)
+                cube.move(f2l_moves)
         else:
             break
 
