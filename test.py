@@ -1,5 +1,5 @@
+import f2l
 from cube import Cube
-from f2l import is_f2l_valid
 from solve import solve_white_cross
 
 
@@ -32,9 +32,9 @@ def test_f2l():
     print(solved_cube)
     print("Shuffle moves:", moves)
     print("Solved moves:", solved_moves, len(solved_moves))
-    edge_pairs, corner_pairs = is_f2l_valid(solved_cube)
-    print("Edge pairs:", edge_pairs)
-    print("Corner pairs:", corner_pairs)
+    f2l_moves = f2l.solve(solved_cube)
+    print("F2L moves:", f2l_moves, len(f2l_moves))
+    print(solved_cube)
 
 
 test_f2l()

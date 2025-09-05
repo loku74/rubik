@@ -38,37 +38,32 @@ def solve_white_cross(cube: Cube):
             return False
         return True
 
-    saved_cube = deepcopy(cube)
+    def solve(step, limit: int, cross: bool = False):
+        nonlocal cube
+        saved_cube = deepcopy(cube)
+        func_list = []
+        while not step():
+            k = 0
+            cube = deepcopy(saved_cube)
+            func_list = []
+            nonlocal test
+            test += 1
+            while k < limit:
+                move = cube.randomMove(cross=cross)
+                func_list.append(move)
+                k += 1
+                if step():
+                    break
+        return func_list
 
-    func_list = []
-    second_func_list = []
     test = 0
 
-    while not first_step():
-        k = 0
-        cube = deepcopy(saved_cube)
-        func_list = []
-        test += 1
-        while k < 6:
-            move = cube.randomMove()
-            func_list.append(move)
-            k += 1
-            if first_step():
-                break
+    first_step_limit = 6
+    second_step_limit = 6
 
-    saved_cube = deepcopy(cube)
+    first_step_funcs = solve(first_step, first_step_limit)
 
-    while not second_step():
-        k = 0
-        cube = deepcopy(saved_cube)
-        second_func_list = []
-        test += 1
-        while k < 6:
-            move = cube.randomMove(cross=True)
-            second_func_list.append(move)
-            k += 1
-            if second_step():
-                break
+    second_step_funcs = solve(second_step, second_step_limit, cross=True)
 
-    final_list = func_list + second_func_list
+    final_list = first_step_funcs + second_step_funcs
     return cube, final_list, test

@@ -313,3 +313,5 @@ class Cube:
         for move in moves:
             func = move_dict[move]
             func()
+
+        return moves
