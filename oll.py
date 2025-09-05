@@ -15,6 +15,10 @@ def solve(cube: Cube):
     oll_moves = [oll.split(" ") for oll in oll_moves]
 
     for oll in oll_moves:
+        saved_cube = deepcopy(cube)
+        oll_solve_moves = saved_cube.move(oll)
+        if is_solved(saved_cube):
+            return oll_solve_moves
         for move in ["U", "U'", "U2"]:
             saved_cube = deepcopy(cube)
             saved_cube.move([move])
