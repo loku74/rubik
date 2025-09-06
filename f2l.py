@@ -253,20 +253,95 @@ def f2l_case2(cube: Cube):
     return None
 
 
+def f2l_case3(cube: Cube):
+    bot_edges = get_bot_edges(cube)
+    top_corners = get_top_corners(cube)
+    final_move_list = []
+    for corner in top_corners:
+        if corner.pair in bot_edges.keys() and bot_edges[corner.pair] == corner.pair:
+            f2l_moves_list = json.loads(open("./algorithms/f2l_case3.json").read())
+            y = pair_y[corner.pair]
+            for f2l_moves in f2l_moves_list:
+                f2l_moves = f2l_moves.split(" ")
+                for move in [None, "U", "U'", "U2"]:
+                    saved_cube = deepcopy(cube)
+                    move_list = []
+                    if y:
+                        move_list.append(y)
+                    if move:
+                        move_list.append(move)
+                    move_list.extend(f2l_moves)
+                    cube_moves = saved_cube.move(move_list)
+                    if f2l_solved(saved_cube, corner.pair):
+                        final_move_list.extend(cube_moves)
+                        break
+
+
+def test_all_f2l_cases(cube: Cube):
+    move_list = []
+
+    case_2_f2l_list = f2l_case2(cube)
+    if case_2_f2l_list:
+        move_list.extend(case_2_f2l_list)
+        cube.move(case_2_f2l_list)
+
+    case_3_f2l_list = f2l_case3(cube)
+    if case_3_f2l_list:
+        move_list.extend(case_3_f2l_list)
+        cube.move(case_3_f2l_list)
+
+    case_1_f2l_list = f2l_case1(cube)
+    if case_1_f2l_list:
+        move_list.extend(case_1_f2l_list)
+        cube.move(case_1_f2l_list)
+
+    if move_list:
+        return move_list
+
+    return None
+
+
+def move_f2l(cube: Cube):
+    pair_list = ["BR", "GR", "GO", "BO"]
+    solved_pairs = []
+    for pair in pair_list:
+        if f2l_solved(cube, pair):
+            solved_pairs.append(pair)
+
+    print("solved pairs:", solved_pairs)
+    if solved_pairs == pair_list:
+        return None
+
+    pair_list = [pair for pair in pair_list if pair not in solved_pairs]
+    print("pair list:", pair_list)
+
+    moves = [["R", "U", "R'"], ["R", "U'", "R'"], ["F'", "U", "F"], ["F'", "U'", "F"]]
+    for pair in pair_list:
+        for move in moves:
+            move_list = []
+            saved_cube = deepcopy(cube)
+            y = pair_y[pair]
+            if y:
+                move_list.append(y)
+            move_list.extend(move)
+            set_moves = saved_cube.move(move_list)
+            if test_all_f2l_cases(saved_cube):
+                return set_moves
+
+
 def solve(cube: Cube):
     saved_cube = deepcopy(cube)
-    move_list = []
+    final_move_list = []
     while True:
-        case_2_f2l_list = f2l_case2(saved_cube)
-        if case_2_f2l_list:
-            move_list.extend(case_2_f2l_list)
-            saved_cube.move(case_2_f2l_list)
-        case_1_f2l_list = f2l_case1(saved_cube)
-        if case_1_f2l_list:
-            move_list.extend(case_1_f2l_list)
-            saved_cube.move(case_1_f2l_list)
+        move_list = test_all_f2l_cases(saved_cube)
+        if move_list:
+            final_move_list.extend(move_list)
+        else:
+            move_list = move_f2l(saved_cube)
+            if move_list:
+                saved_cube.move(move_list)
+                final_move_list.extend(move_list)
+            else:
+                return final_move_list
 
-        if not case_2_f2l_list and not case_1_f2l_list:
-            break
-
-    return move_list
+    return final_move_list
