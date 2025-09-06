@@ -256,6 +256,19 @@ class Cube:
         self.previous = set
         func = choices(set)[0]
         func()
+
+        func_translate = {
+            "Ui": "U'",
+            "Di": "D'",
+            "Ri": "R'",
+            "Li": "L'",
+            "Fi": "F'",
+            "Bi": "B'",
+        }
+
+        if func.__name__ in func_translate:
+            return func_translate[func.__name__]
+
         return func.__name__
 
     def translateY(self, moves=[]):
