@@ -62,16 +62,13 @@ def solve(cube: Cube):
     first_step_limit = 6
     second_step_limit = 6
 
-    print("first step")
     first_step_funcs = do_step(cube, first_step, first_step_limit)
 
     initial_cube.move(first_step_funcs)
 
-    print("second step")
     second_step_funcs = do_step(
         initial_cube, second_step, second_step_limit, cross=True
     )
 
     final_list = first_step_funcs + second_step_funcs
-    print("white cross solved")
     return final_list
