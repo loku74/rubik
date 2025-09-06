@@ -30,6 +30,13 @@ def solve(cube: Cube):
     pll_moves = json.loads(open("./algorithms/PLL.json").read())
     pll_moves = [pll.split(" ") for pll in pll_moves]
 
+    # first check if already solved and need rotations
+    for move in ["U", "U'", "U2"]:
+        saved_cube = deepcopy(cube)
+        moves = saved_cube.move([move])
+        if is_solved(saved_cube):
+            return moves
+
     for pll in pll_moves:
         for y in [None, "y", "y'", "y2"]:
             saved_cube = deepcopy(cube)
