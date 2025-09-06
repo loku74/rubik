@@ -27,6 +27,7 @@ def test_f2l():
     f2l_moves = f2l.solve(cube)
     if f2l_moves:
         print("F2L moves:", f2l_moves, len(f2l_moves))
+        cube.move(f2l_moves)
         print(cube)
     # PRENDRE EN COMPTE QUE LES OLL / PLL PEUVENT ETRE SKIP
     # VERIFIER AVANT POUR FAIRE UNE OLL QUE LA FACE JAUNE EST VIDE
