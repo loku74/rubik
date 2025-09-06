@@ -11,6 +11,9 @@ def solve(cube: Cube):
                 return False
         return True
 
+    if is_solved(cube):
+        return None
+
     oll_moves = json.loads(open("./algorithms/OLL.json").read())
     oll_moves = [oll.split(" ") for oll in oll_moves]
 
