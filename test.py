@@ -38,6 +38,9 @@ def test_f2l():
     if f2l_moves:
         print("F2L moves:", f2l_moves)
         print(solved_cube)
+    # PRENDRE EN COMPTE QUE LES OLL / PLL PEUVENT ETRE SKIP
+    # VERIFIER AVANT POUR FAIRE UNE OLL QUE LA FACE JAUNE EST VIDE
+    # IDEM POUR PLL VERIFIER QUE LE CUBE N'EST PAS RESOLU (AVEC U U' ET U2 AUSSI!!)
     oll_moves = oll.solve(solved_cube)
     if oll_moves:
         print("OLL moves:", oll_moves)
@@ -48,6 +51,10 @@ def test_f2l():
         print("PLL moves:", pll_moves)
         solved_cube.move(pll_moves)
         print(solved_cube)
+        print(
+            "total spins:",
+            len(pll_moves) + len(oll_moves) + len(f2l_moves) + len(solved_moves),
+        )
 
 
 test_f2l()

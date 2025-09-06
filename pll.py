@@ -31,18 +31,20 @@ def solve(cube: Cube):
     pll_moves = [pll.split(" ") for pll in pll_moves]
 
     for pll in pll_moves:
-        saved_cube = deepcopy(cube)
-        pll_solve_moves = saved_cube.move(pll)
-        if is_solved(saved_cube):
-            return pll_solve_moves
-        for y in ["y", "y'", "y2"]:
+        for y in [None, "y", "y'", "y2"]:
             saved_cube = deepcopy(cube)
-            pll_solve_moves = saved_cube.move([y] + pll)
+            if y:
+                pll_solve_moves = saved_cube.move([y] + pll)
+            else:
+                pll_solve_moves = saved_cube.move(pll)
             if is_solved(saved_cube):
                 return pll_solve_moves
             for move in ["U", "U'", "U2"]:
                 saved_cube = deepcopy(cube)
-                pll_solve_moves = saved_cube.move([y] + pll + [move])
+                if y:
+                    pll_solve_moves = saved_cube.move([y] + pll + [move])
+                else:
+                    pll_solve_moves = saved_cube.move(pll + [move])
                 if is_solved(saved_cube):
                     return pll_solve_moves
 
