@@ -4,7 +4,7 @@ from copy import deepcopy
 from cube import Cube
 
 
-def solve(cube: Cube):
+def solve(cube: Cube) -> list[str]:
     def is_solved(test: Cube):
         for color in test.cube[Cube.YELLOW]:
             if color != "Y":
@@ -12,10 +12,10 @@ def solve(cube: Cube):
         return True
 
     if is_solved(cube):
-        return None
+        return []
 
     oll_moves = json.loads(open("./algorithms/OLL.json").read())
-    oll_moves = [oll.split(" ") for oll in oll_moves]
+    oll_moves = [oll.split() for oll in oll_moves]
 
     for oll in oll_moves:
         saved_cube = deepcopy(cube)
@@ -28,4 +28,4 @@ def solve(cube: Cube):
             if is_solved(saved_cube):
                 return oll_solve_moves
 
-    return None
+    return []

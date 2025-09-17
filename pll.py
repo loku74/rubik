@@ -4,40 +4,18 @@ from copy import deepcopy
 from cube import Cube
 
 
-def is_solved(test: Cube):
-    for color in test.cube[Cube.YELLOW]:
-        if color != "Y":
-            return False
-    for color in test.cube[Cube.WHITE]:
-        if color != "W":
-            return False
-    for color in test.cube[Cube.ORANGE]:
-        if color != "O":
-            return False
-    for color in test.cube[Cube.GREEN]:
-        if color != "G":
-            return False
-    for color in test.cube[Cube.BLUE]:
-        if color != "B":
-            return False
-    for color in test.cube[Cube.RED]:
-        if color != "R":
-            return False
-    return True
-
-
-def solve(cube: Cube):
+def solve(cube: Cube) -> list[str]:
     pll_moves = json.loads(open("./algorithms/PLL.json").read())
-    pll_moves = [pll.split(" ") for pll in pll_moves]
+    pll_moves = [pll.split() for pll in pll_moves]
 
-    if is_solved(cube):
-        return None
+    if cube.is_solved():
+        return []
 
     # first check if it only needs rotations
     for move in ["U", "U'", "U2"]:
         saved_cube = deepcopy(cube)
         moves = saved_cube.move([move])
-        if is_solved(saved_cube):
+        if saved_cube.is_solved():
             return moves
 
     for pll in pll_moves:
@@ -47,7 +25,7 @@ def solve(cube: Cube):
                 pll_solve_moves = saved_cube.move([y] + pll)
             else:
                 pll_solve_moves = saved_cube.move(pll)
-            if is_solved(saved_cube):
+            if saved_cube.is_solved():
                 return pll_solve_moves
             for move in ["U", "U'", "U2"]:
                 saved_cube = deepcopy(cube)
@@ -55,7 +33,7 @@ def solve(cube: Cube):
                     pll_solve_moves = saved_cube.move([y] + pll + [move])
                 else:
                     pll_solve_moves = saved_cube.move(pll + [move])
-                if is_solved(saved_cube):
+                if saved_cube.is_solved():
                     return pll_solve_moves
 
-    return None
+    return []

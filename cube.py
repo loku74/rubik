@@ -328,3 +328,51 @@ class Cube:
             func()
 
         return moves
+
+    def is_solved(self):
+        for color in self.cube[Cube.YELLOW]:
+            if color != "Y":
+                return False
+        for color in self.cube[Cube.WHITE]:
+            if color != "W":
+                return False
+        for color in self.cube[Cube.ORANGE]:
+            if color != "O":
+                return False
+        for color in self.cube[Cube.GREEN]:
+            if color != "G":
+                return False
+        for color in self.cube[Cube.BLUE]:
+            if color != "B":
+                return False
+        for color in self.cube[Cube.RED]:
+            if color != "R":
+                return False
+
+        return True
+
+    def solve(self) -> list[str]:
+        solve_moves = []
+
+        import f2l
+        import oll
+        import pll
+        import white_cross
+
+        white_cross_moves = white_cross.solve(self)
+        solve_moves.extend(white_cross_moves)
+        self.move(white_cross_moves)
+
+        f2l_moves = f2l.solve(self)
+        solve_moves.extend(f2l_moves)
+        self.move(f2l_moves)
+
+        oll_moves = oll.solve(self)
+        solve_moves.extend(oll_moves)
+        self.move(oll_moves)
+
+        pll_moves = pll.solve(self)
+        solve_moves.extend(pll_moves)
+        self.move(pll_moves)
+
+        return solve_moves
