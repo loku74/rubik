@@ -152,13 +152,6 @@ def get_bot_corners(cube: Cube):
     return corner_dict
 
 
-def get_corner(edge_pairs, corner_pairs: list[CornerPair]):
-    for corner_pair in corner_pairs:
-        if corner_pair.pair in edge_pairs:
-            return corner_pair
-    return None
-
-
 def solve_f2l_top(cube: Cube, pair: str):
     f2l_moves = json.loads(open("./algorithms/top_f2l.json").read())
     f2l_moves = [move.split() for move in f2l_moves]
@@ -206,7 +199,7 @@ def f2l_case1(cube: Cube):
                     corner = corner_pair
             # if not we place one
             if not corner:
-                corner = get_corner(edge_pairs, corner_pairs)
+                corner = pairs[0]
                 move = set_corner(corner, saved_cube)
                 if move:
                     saved_cube.move([move])

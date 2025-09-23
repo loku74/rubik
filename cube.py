@@ -82,7 +82,7 @@ class Cube:
         color_a: int,
         color_b: int,
         pieces: list[int],
-        to: list[int] or None = None,
+        to: list[int] | None = None,
     ):
         x1 = pieces[0]
         x2 = pieces[1]
