@@ -362,7 +362,8 @@ class Cube:
         solves_functions = (white_cross.solve, f2l.solve, oll.solve, pll.solve)
 
         for solve_function in solves_functions:
-            solve_moves.extend(solve_function(self))
-            self.move(solve_moves)
+            solve_function_moves = solve_function(self)
+            solve_moves.extend(solve_function_moves)
+            self.move(solve_function_moves)
 
         return solve_moves
