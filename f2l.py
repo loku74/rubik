@@ -39,20 +39,20 @@ pair_y = {"BR": None, "GR": "y", "GO": "y2", "BO": "y'"}
 
 def f2l_solved(cube: Cube, pair: str):
     pair_dict = {
-        "GO": (
-            ("O", (cube.cube[Cube.ORANGE][3], cube.cube[Cube.ORANGE][6])),
-            ("G", (cube.cube[Cube.GREEN][5], cube.cube[Cube.GREEN][8])),
-            ("W", (cube.cube[Cube.WHITE][6])),
+        "BR": (
+            ("B", (cube.cube[Cube.BLUE][5], cube.cube[Cube.BLUE][8])),
+            ("R", (cube.cube[Cube.RED][3], cube.cube[Cube.RED][6])),
+            ("W", (cube.cube[Cube.WHITE][2])),
         ),
         "GR": (
             ("G", (cube.cube[Cube.GREEN][3], cube.cube[Cube.GREEN][6])),
             ("R", (cube.cube[Cube.RED][5], cube.cube[Cube.RED][8])),
             ("W", (cube.cube[Cube.WHITE][8])),
         ),
-        "BR": (
-            ("B", (cube.cube[Cube.BLUE][5], cube.cube[Cube.BLUE][8])),
-            ("R", (cube.cube[Cube.RED][3], cube.cube[Cube.RED][6])),
-            ("W", (cube.cube[Cube.WHITE][2])),
+        "GO": (
+            ("O", (cube.cube[Cube.ORANGE][3], cube.cube[Cube.ORANGE][6])),
+            ("G", (cube.cube[Cube.GREEN][5], cube.cube[Cube.GREEN][8])),
+            ("W", (cube.cube[Cube.WHITE][6])),
         ),
         "BO": (
             ("B", (cube.cube[Cube.BLUE][3], cube.cube[Cube.BLUE][6])),
@@ -197,7 +197,7 @@ def f2l_case1(cube: Cube):
             for corner_pair in pairs:
                 if pair_dict[corner_pair.pair] == corner_pair.index:
                     corner = corner_pair
-            # if not we place one
+            # if not we select the first corner in pairs
             if not corner:
                 corner = pairs[0]
                 move = set_corner(corner, saved_cube)
@@ -212,9 +212,7 @@ def f2l_case1(cube: Cube):
         else:
             break
 
-    if final_move_list:
-        return final_move_list
-    return None
+    return final_move_list
 
 
 def f2l_case2(cube: Cube):
@@ -241,9 +239,7 @@ def f2l_case2(cube: Cube):
                         final_move_list.extend(cube_moves)
                         break
 
-    if final_move_list:
-        return final_move_list
-    return None
+    return final_move_list
 
 
 def f2l_case3(cube: Cube):
@@ -269,6 +265,8 @@ def f2l_case3(cube: Cube):
                         final_move_list.extend(cube_moves)
                         break
 
+    return final_move_list
+
 
 def test_all_f2l_cases(cube: Cube):
     move_list = []
@@ -280,8 +278,7 @@ def test_all_f2l_cases(cube: Cube):
             move_list.extend(f2l_moves_list)
             cube.move(f2l_moves_list)
 
-    if move_list:
-        return move_list
+    return move_list
 
 
 def move_f2l(cube: Cube):

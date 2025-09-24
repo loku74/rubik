@@ -1,44 +1,45 @@
-from copy import deepcopy
+# import datetime
+# from copy import deepcopy
 
-from cube import Cube
-
-
-def randomCube():
-    cube = Cube()
-    k = 0
-    moves = []
-    max_moves = 20
-    while k < max_moves:
-        move = cube.randomMove()
-        moves.append(move)
-        k += 1
-    return cube, moves
+# from cube import Cube
 
 
-count = 0
-while True:
-    cube, shuffle_moves = randomCube()
-    initial_cube = deepcopy(cube)
-    solve_moves = cube.solve()
-    if not cube.is_solved():
-        print("shuffle moves:", shuffle_moves)
-        print(initial_cube)
-        print("solve moves:", solve_moves)
-        print(cube)
-        break
-    count += 1
-    print(count)
+# def randomCube():
+#     cube = Cube()
+#     k = 0
+#     moves = []
+#     max_moves = 20
+#     while k < max_moves:
+#         move = cube.randomMove()
+#         moves.append(move)
+#         k += 1
+#     return cube, moves
 
 
-# cube, shuffle_moves = randomCube()
-# print("shuffle moves:", shuffle_moves)
-# print(cube)
-# solve_moves = cube.solve()
-# print("------------------------------------------------------")
-# print("solve moves:", solve_moves)
-# print(cube)
+# count = 0
+# solve_moves_count = 0
 
-# if not cube.is_solved():
-#     print(cube)
-#     print("solve moves:", solve_moves)
-#     print("shuffle moves:", shuffle_moves)
+# now = datetime.datetime.now().timestamp()
+# while True and count < 1_000:
+#     cube, shuffle_moves = randomCube()
+#     initial_cube = deepcopy(cube)
+#     solve_moves = cube.solve()
+#     if not cube.is_solved():
+#         print("shuffle moves:", shuffle_moves)
+#         print(initial_cube)
+#         print("solve moves:", solve_moves)
+#         print(cube)
+#         break
+#     count += 1
+#     solve_moves_count += len(solve_moves)
+#     print(count)
+
+# after = datetime.datetime.now().timestamp()
+# time_taken = after - now
+# avg = time_taken / count
+# avg_solve_moves = solve_moves_count / count
+
+# print(f"Average time taken: {avg:.2f} seconds")
+# print(f"Average number of solve moves: {avg_solve_moves:.2f}")
+
+

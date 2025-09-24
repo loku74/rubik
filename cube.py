@@ -362,6 +362,10 @@ class Cube:
         solves_functions = (white_cross.solve, f2l.solve, oll.solve, pll.solve)
 
         for solve_function in solves_functions:
+            if solve_function == oll.solve:
+                for pair in ["BR", "GR", "GO", "BO"]:
+                    if not f2l.f2l_solved(self, pair):
+                        break
             solve_function_moves = solve_function(self)
             solve_moves.extend(solve_function_moves)
             self.move(solve_function_moves)

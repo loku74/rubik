@@ -46,14 +46,13 @@ def do_step(cube: Cube, step, limit: int, cross: bool = False):
     while True:
         saved_cube = deepcopy(cube)
         k = 0
-        func_list = []
+        move_list = []
         while k < limit:
             move = saved_cube.randomMove(cross=cross)
-            func_list.append(move)
+            move_list.append(move)
             k += 1
             if step(saved_cube):
-                return func_list
-    return func_list
+                return move_list
 
 
 def solve(cube: Cube):
