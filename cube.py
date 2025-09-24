@@ -359,20 +359,10 @@ class Cube:
         import pll
         import white_cross
 
-        white_cross_moves = white_cross.solve(self)
-        solve_moves.extend(white_cross_moves)
-        self.move(white_cross_moves)
+        solves_functions = (white_cross.solve, f2l.solve, oll.solve, pll.solve)
 
-        f2l_moves = f2l.solve(self)
-        solve_moves.extend(f2l_moves)
-        self.move(f2l_moves)
-
-        oll_moves = oll.solve(self)
-        solve_moves.extend(oll_moves)
-        self.move(oll_moves)
-
-        pll_moves = pll.solve(self)
-        solve_moves.extend(pll_moves)
-        self.move(pll_moves)
+        for solve_function in solves_functions:
+            solve_moves.extend(solve_function(self))
+            self.move(solve_moves)
 
         return solve_moves

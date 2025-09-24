@@ -273,25 +273,15 @@ def f2l_case3(cube: Cube):
 def test_all_f2l_cases(cube: Cube):
     move_list = []
 
-    case_2_f2l_list = f2l_case2(cube)
-    if case_2_f2l_list:
-        move_list.extend(case_2_f2l_list)
-        cube.move(case_2_f2l_list)
-
-    case_3_f2l_list = f2l_case3(cube)
-    if case_3_f2l_list:
-        move_list.extend(case_3_f2l_list)
-        cube.move(case_3_f2l_list)
-
-    case_1_f2l_list = f2l_case1(cube)
-    if case_1_f2l_list:
-        move_list.extend(case_1_f2l_list)
-        cube.move(case_1_f2l_list)
+    f2l_cases = (f2l_case2, f2l_case3, f2l_case1)
+    for f2l_case in f2l_cases:
+        f2l_moves_list = f2l_case(cube)
+        if f2l_moves_list:
+            move_list.extend(f2l_moves_list)
+            cube.move(f2l_moves_list)
 
     if move_list:
         return move_list
-
-    return None
 
 
 def move_f2l(cube: Cube):
