@@ -352,6 +352,42 @@ class Cube:
         return True
 
     def solve(self) -> list[str]:
+        def optimize_moves(moves: list[str]):
+            def get_dup(moves: list[str]) -> int:
+                for index, move in enumerate(moves):
+                    if index + 1 < len(moves) and move[0] == moves[index + 1][0]:
+                        return index
+                return -1
+
+            index = get_dup(moves)
+            while index >= 0:
+                count = 0
+                for move in (moves[index], moves[index + 1]):
+                    if len(move) > 1:
+                        if move[1] == "'":
+                            count -= 1
+                        else:
+                            count += 2
+                    else:
+                        count += 1
+                count = count % 4
+                match count:
+                    case 0:
+                        moves.pop(index)
+                        moves.pop(index)
+                    case 1:
+                        moves[index] = moves[index][0]
+                        moves.pop(index + 1)
+                    case 2:
+                        moves[index] = moves[index][0] + "2"
+                        moves.pop(index + 1)
+                    case 3:
+                        moves[index] = moves[index][0] + "'"
+                        moves.pop(index + 1)
+                index = get_dup(moves)
+
+            return moves
+
         solve_moves = []
 
         import f2l
@@ -362,12 +398,10 @@ class Cube:
         solves_functions = (white_cross.solve, f2l.solve, oll.solve, pll.solve)
 
         for solve_function in solves_functions:
-            if solve_function == oll.solve:
-                for pair in ["BR", "GR", "GO", "BO"]:
-                    if not f2l.f2l_solved(self, pair):
-                        break
             solve_function_moves = solve_function(self)
             solve_moves.extend(solve_function_moves)
             self.move(solve_function_moves)
+
+        solve_moves = optimize_moves(solve_moves)
 
         return solve_moves
