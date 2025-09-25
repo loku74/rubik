@@ -56,6 +56,19 @@ def do_step(cube: Cube, step, limit: int, cross: bool = False):
 
 
 def solve(cube: Cube):
+    def optimize_moves(cube: Cube, moves: list[str]):
+        i = 0
+        while i < len(moves):
+            saved_cube = deepcopy(cube)
+            moves_copy = moves.copy()
+            moves_copy.pop(i)
+            saved_cube.move(moves_copy)
+            if second_step(saved_cube):
+                moves.pop(i)
+            else:
+                i += 1
+        return moves
+
     initial_cube = deepcopy(cube)
 
     first_step_limit = 6
@@ -70,4 +83,6 @@ def solve(cube: Cube):
     )
 
     final_list = first_step_funcs + second_step_funcs
+    cube_copy = deepcopy(cube)
+    final_list = optimize_moves(cube_copy, final_list)
     return final_list

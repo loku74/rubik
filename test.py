@@ -43,7 +43,8 @@ time_taken = after - now
 avg = time_taken / count
 avg_solve_moves = solve_moves_count / count
 
-print(f"Average time taken: {avg:.2f} seconds")
+print("Number of rubiks cube solved:", count)
+print(f"Average time per solve: {avg:.2f} seconds")
 print(f"Average number of solve moves: {avg_solve_moves:.2f}")
 
 # shuffle = [
