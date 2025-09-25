@@ -46,7 +46,6 @@ avg_solve_moves = solve_moves_count / count
 print(f"Average time taken: {avg:.2f} seconds")
 print(f"Average number of solve moves: {avg_solve_moves:.2f}")
 
-# cube = Cube()
 # shuffle = [
 #     "U2",
 #     "L2",
@@ -87,3 +86,11 @@ print(f"Average number of solve moves: {avg_solve_moves:.2f}")
 #     "U'",
 #     "R",
 # ]
+
+# cube = Cube()
+# cube.move(shuffle)
+# cube.move(moves)
+# print(cube)
+# solve_moves = cube.solve()
+# print(cube)
+# print(" ".join(solve_moves), len(solve_moves) + len(moves))

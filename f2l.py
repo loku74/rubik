@@ -277,12 +277,21 @@ def test_all_f2l_cases(cube: Cube):
             return f2l_move_list
 
 
-def move_f2l(cube: Cube):
+def get_f2l_pairs(
+    cube: Cube,
+) -> list[str]:
     pair_list = ["BR", "GR", "GO", "BO"]
-    solved_pairs = []
+    pairs = []
     for pair in pair_list:
         if f2l_solved(cube, pair):
-            solved_pairs.append(pair)
+            pairs.append(pair)
+
+    return pairs
+
+
+def move_f2l(cube: Cube):
+    pair_list = ["BR", "GR", "GO", "BO"]
+    solved_pairs = get_f2l_pairs(cube)
 
     if solved_pairs == pair_list:
         return None
@@ -303,6 +312,38 @@ def move_f2l(cube: Cube):
                 return set_moves
 
 
+def all_f2l_solved(cube: Cube):
+    pair_list = ["BR", "GR", "GO", "BO"]
+    for pair in pair_list:
+        if not f2l_solved(cube, pair):
+            return False
+    return True
+
+
+# in case edges and corners are not properly placed, we mix them a bit to have a f2l solution
+def mix_f2l(cube: Cube) -> list[str]:
+    pair_list = ["BR", "BO", "GO", "GR"]
+    solved_pairs = get_f2l_pairs(cube)
+    move = ["R", "U", "R'"]
+    final_move_list = []
+    saved_cube = deepcopy(cube)
+    for pair in pair_list:
+        if pair in solved_pairs:
+            continue
+
+        move_list = []
+        y = pair_y[pair]
+        if y:
+            move_list.append(y)
+        move_list.extend(move)
+        set_moves = saved_cube.move(move_list)
+        final_move_list.extend(set_moves)
+        if test_all_f2l_cases(saved_cube):
+            return final_move_list
+
+    return final_move_list
+
+
 def solve(cube: Cube) -> list[str]:
     saved_cube = deepcopy(cube)
     final_move_list = []
@@ -316,5 +357,9 @@ def solve(cube: Cube) -> list[str]:
             if move_list:
                 saved_cube.move(move_list)
                 final_move_list.extend(move_list)
+            elif not all_f2l_solved(saved_cube):
+                mix_moves = mix_f2l(saved_cube)
+                saved_cube.move(mix_moves)
+                final_move_list.extend(mix_moves)
             else:
                 return final_move_list
