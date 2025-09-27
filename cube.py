@@ -5,6 +5,19 @@ import numpy as np
 from utils import y_dict
 
 
+def randomCube(spins: int = 20):
+    if spins < 1:
+        raise Exception("Spins must be a positive, non-zero integer")
+    cube = Cube()
+    k = 0
+    moves = []
+    while k < spins:
+        move = cube.randomMove()
+        moves.append(move)
+        k += 1
+    return cube, moves
+
+
 class Cube:
     WHITE = 0
     YELLOW = 1

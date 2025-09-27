@@ -1,20 +1,7 @@
 import datetime
 from copy import deepcopy
 
-from cube import Cube
-
-
-def randomCube():
-    cube = Cube()
-    k = 0
-    moves = []
-    max_moves = 20
-    while k < max_moves:
-        move = cube.randomMove()
-        moves.append(move)
-        k += 1
-    return cube, moves
-
+from cube import randomCube
 
 count = 0
 solve_moves_count = 0
@@ -46,52 +33,3 @@ avg_solve_moves = solve_moves_count / count
 print("Number of rubiks cube solved:", count)
 print(f"Average time per solve: {avg:.2f} seconds")
 print(f"Average number of solve moves: {avg_solve_moves:.2f}")
-
-# shuffle = [
-#     "U2",
-#     "L2",
-#     "U",
-#     "F'",
-#     "U",
-#     "R'",
-#     "L",
-#     "B",
-#     "L'",
-#     "R'",
-#     "D2",
-#     "R'",
-#     "B'",
-#     "L2",
-#     "U",
-#     "F",
-#     "D'",
-#     "F2",
-#     "U2",
-#     "D'",
-# ]
-
-# moves = [
-#     "R",
-#     "L'",
-#     "F2",
-#     "D'",
-#     "L2",
-#     "D",
-#     "L2",
-#     "U'",
-#     "B",
-#     "U2",
-#     "B'",
-#     "U",
-#     "R'",
-#     "U'",
-#     "R",
-# ]
-
-# cube = Cube()
-# cube.move(shuffle)
-# cube.move(moves)
-# print(cube)
-# solve_moves = cube.solve()
-# print(cube)
-# print(" ".join(solve_moves), len(solve_moves) + len(moves))
