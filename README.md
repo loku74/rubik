@@ -1,4 +1,4 @@
-# Rubik's Cube Solver
+# rubik
 
 A Python-based Rubik's cube solver that can solve any valid cube configuration using the CFOP method (Cross, F2L, OLL, PLL).
 
