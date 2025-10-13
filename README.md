@@ -19,13 +19,13 @@ A Python-based Rubik's cube solver that can solve any valid cube configuration u
 
 3. Create a virtual environment:
    ```bash
-   python3 -m venv .
+   python3 -m venv venv
    ```
 
 4. Activate the virtual environment:
    - On macOS/Linux:
      ```bash
-     source bin/activate
+     source venv/bin/activate
      ```
    - On Windows:
      ```powershell
