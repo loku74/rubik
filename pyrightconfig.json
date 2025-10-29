@@ -1,0 +1,4 @@
+{
+    "typeCheckingMode": "basic",
+    "ignore": ["**/__pycache__"]
+}
