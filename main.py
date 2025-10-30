@@ -1,21 +1,42 @@
+import argparse
 import sys
 
 from cube import Cube, randomCube
 
 
-def exit(error):
-    usage = 'Usage: python3 main.py "<spin_sequence>" | random | random:<spins>'
-    print(error, file=sys.stderr)
-    print(usage, file=sys.stderr)
-    sys.exit(1)
-
-
 def main():
-    argc = len(sys.argv)
-    if argc < 2:
-        exit("Error. Spin sequence required")
-    if argc > 2:
-        exit("Error. Too many arguments")
+    parser = argparse.ArgumentParser(
+        description="Rubik's Cube solver - Apply spin sequences or generate random cubes",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python3 main.py "U R U' L'"
+  python3 main.py --random
+  python3 main.py --random 30
+  python3 main.py -r 50
+        """,
+    )
+
+    group = parser.add_mutually_exclusive_group(required=True)
+
+    group.add_argument(
+        "sequence",
+        type=str,
+        nargs="?",
+        help="Spin sequence (e.g., \"U R U' L'\")",
+    )
+
+    group.add_argument(
+        "-r",
+        "--random",
+        type=int,
+        nargs="?",
+        const=20,
+        metavar="SPINS",
+        help="Generate a random cube with optional number of spins (default: 20)",
+    )
+
+    args = parser.parse_args()
 
     valid_spin = [
         "U",
@@ -37,17 +58,12 @@ def main():
         "R'",
         "R2",
     ]
-    input = sys.argv[1]
-    if input[:6] == "random":
-        spins = 20
-        random_input = input.split(":")
-        if len(random_input) > 2:
-            exit("Error. Too many arguments")
-        elif len(random_input) == 2:
-            try:
-                spins = int(random_input[1])
-            except Exception:
-                exit("Error. Invalid number of spins")
+
+    if args.random is not None:
+        spins = args.random
+        if spins <= 0:
+            parser.error("Number of spins must be positive")
+
         try:
             cube, moves = randomCube(spins)
             print("Shuffle:", " ".join(moves))
@@ -55,17 +71,19 @@ def main():
             solve_moves = cube.solve()
             print("Solution:", " ".join(solve_moves), f"[{len(solve_moves)} spins]")
         except Exception as e:
-            exit(f"Error. {e}")
-    else:
-        spin_sequence = input.split()
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
+    elif args.sequence:
+        spin_sequence = args.sequence.split()
+
         for spin in spin_sequence:
             if spin not in valid_spin:
-                exit(f"Error. Invalid spin: {spin}")
+                parser.error(f"Invalid spin: {spin}")
 
         cube = Cube()
         cube.move(spin_sequence)
         solve_sequence = cube.solve()
-        print(" ".join(solve_sequence))
+        print(" ".join(solve_sequence), f"[{len(solve_sequence)} spins]")
 
 
 if __name__ == "__main__":
