@@ -89,8 +89,12 @@ Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2
             if spin not in valid_spin:
                 parser.error(f"Invalid spin: {spin}")
 
-        cube = Cube()
-        cube.move(spin_sequence)
+        try:
+            cube = Cube()
+            cube.move(spin_sequence)
+        except Exception as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
 
     if args.display:
         print(cube)
