@@ -16,6 +16,8 @@ Examples:
   python3 main.py --random
   python3 main.py --random 30
   python3 main.py -r 50
+
+Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2
         """,
     )
 
