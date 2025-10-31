@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import sys
 
 from cube import Cube, randomCube
 
@@ -70,36 +69,29 @@ Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2
         "R2",
     ]
 
-    if args.random is not None:
+    if args.random:
         spins = args.random
         if spins <= 0:
             parser.error("Number of spins must be positive")
 
-        try:
-            cube, moves = randomCube(spins)
-            print("Shuffle:", " ".join(moves))
-            print(f"{'-' * (len(' '.join(moves)) + 9)}")
-        except Exception as e:
-            print(f"Error: {e}", file=sys.stderr)
-            sys.exit(1)
-    elif args.sequence:
+        cube, moves = randomCube(spins)
+        print("Shuffle:", " ".join(moves))
+        print(f"{'-' * (len(' '.join(moves)) + 9)}")
+    else:
         spin_sequence = args.sequence.split()
-
         for spin in spin_sequence:
             if spin not in valid_spin:
                 parser.error(f"Invalid spin: {spin}")
 
-        try:
-            cube = Cube()
-            cube.move(spin_sequence)
-        except Exception as e:
-            print(f"Error: {e}", file=sys.stderr)
-            sys.exit(1)
+        cube = Cube()
+        cube.move(spin_sequence)
 
     if args.display:
         print(cube)
+
     solve_moves = cube.solve()
     print("Solution:", " ".join(solve_moves), f"[{len(solve_moves)} spins]")
+
     if args.display:
         print(cube)
 
