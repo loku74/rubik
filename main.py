@@ -38,6 +38,13 @@ Examples:
         help="Generate a random cube with optional number of spins (default: 20)",
     )
 
+    parser.add_argument(
+        "-d",
+        "--display",
+        action="store_true",
+        help="Display the cube",
+    )
+
     args = parser.parse_args()
 
     valid_spin = [
@@ -70,8 +77,6 @@ Examples:
             cube, moves = randomCube(spins)
             print("Shuffle:", " ".join(moves))
             print(f"{'-' * (len(' '.join(moves)) + 9)}")
-            solve_moves = cube.solve()
-            print("Solution:", " ".join(solve_moves), f"[{len(solve_moves)} spins]")
         except Exception as e:
             print(f"Error: {e}", file=sys.stderr)
             sys.exit(1)
@@ -84,8 +89,13 @@ Examples:
 
         cube = Cube()
         cube.move(spin_sequence)
-        solve_sequence = cube.solve()
-        print(" ".join(solve_sequence), f"[{len(solve_sequence)} spins]")
+
+    if args.display:
+        print(cube)
+    solve_moves = cube.solve()
+    print("Solution:", " ".join(solve_moves), f"[{len(solve_moves)} spins]")
+    if args.display:
+        print(cube)
 
 
 if __name__ == "__main__":
