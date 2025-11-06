@@ -1,8 +1,49 @@
+from enum import Enum
 from random import choices
 
 import numpy as np
 
 from utils import y_dict
+
+
+class RubikColors(Enum):
+    UNKNOWN = -1
+    WHITE = 0
+    YELLOW = 1
+    RED = 2
+    GREEN = 3
+    BLUE = 4
+    ORANGE = 5
+
+
+class FacePositions(Enum):
+    UNKNOWN = -1
+    FRONT = 0
+    BACK = 1
+    LEFT = 2
+    RIGHT = 3
+    UP = 4
+    DOWN = 5
+
+
+class Corner:
+    def __init__(self):
+        pass
+
+
+class Edge:
+    def __init__(self):
+        pass
+
+
+class Face:
+    def __init__(
+        self,
+        color: RubikColors = RubikColors.UNKNOWN,
+        position: FacePositions = FacePositions.UNKNOWN,
+    ):
+        self.color = color
+        self.position = position
 
 
 def randomCube(spins: int = 20):
