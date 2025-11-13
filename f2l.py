@@ -2,7 +2,7 @@ import json
 from copy import deepcopy
 from dataclasses import dataclass
 
-from cube import Cube
+from cube import RubikCube
 
 
 @dataclass
@@ -12,7 +12,7 @@ class CornerPair:
 
 
 top_edges_index = (1, 3, 5, 7)
-top_edges_dict = {1: Cube.GREEN, 3: Cube.ORANGE, 5: Cube.RED, 7: Cube.BLUE}
+top_edges_dict = {1: RubikCube.GREEN, 3: RubikCube.ORANGE, 5: RubikCube.RED, 7: RubikCube.BLUE}
 
 top_corners_pairs = (
     (0, 0, 2),
@@ -22,10 +22,10 @@ top_corners_pairs = (
 )
 
 top_corners_dict = {
-    0: [Cube.ORANGE, Cube.GREEN],
-    2: [Cube.GREEN, Cube.RED],
-    8: [Cube.RED, Cube.BLUE],
-    6: [Cube.BLUE, Cube.ORANGE],
+    0: [RubikCube.ORANGE, RubikCube.GREEN],
+    2: [RubikCube.GREEN, RubikCube.RED],
+    8: [RubikCube.RED, RubikCube.BLUE],
+    6: [RubikCube.BLUE, RubikCube.ORANGE],
 }
 pair_dict = {
     "GO": 0,
@@ -37,27 +37,27 @@ pair_dict = {
 pair_y = {"BR": None, "GR": "y", "GO": "y2", "BO": "y'"}
 
 
-def f2l_solved(cube: Cube, pair: str):
+def f2l_solved(cube: RubikCube, pair: str):
     pair_dict = {
         "BR": (
-            ("B", (cube.cube[Cube.BLUE][5], cube.cube[Cube.BLUE][8])),
-            ("R", (cube.cube[Cube.RED][3], cube.cube[Cube.RED][6])),
-            ("W", (cube.cube[Cube.WHITE][2])),
+            ("B", (cube.cube[RubikCube.BLUE][5], cube.cube[RubikCube.BLUE][8])),
+            ("R", (cube.cube[RubikCube.RED][3], cube.cube[RubikCube.RED][6])),
+            ("W", (cube.cube[RubikCube.WHITE][2])),
         ),
         "GR": (
-            ("G", (cube.cube[Cube.GREEN][3], cube.cube[Cube.GREEN][6])),
-            ("R", (cube.cube[Cube.RED][5], cube.cube[Cube.RED][8])),
-            ("W", (cube.cube[Cube.WHITE][8])),
+            ("G", (cube.cube[RubikCube.GREEN][3], cube.cube[RubikCube.GREEN][6])),
+            ("R", (cube.cube[RubikCube.RED][5], cube.cube[RubikCube.RED][8])),
+            ("W", (cube.cube[RubikCube.WHITE][8])),
         ),
         "GO": (
-            ("O", (cube.cube[Cube.ORANGE][3], cube.cube[Cube.ORANGE][6])),
-            ("G", (cube.cube[Cube.GREEN][5], cube.cube[Cube.GREEN][8])),
-            ("W", (cube.cube[Cube.WHITE][6])),
+            ("O", (cube.cube[RubikCube.ORANGE][3], cube.cube[RubikCube.ORANGE][6])),
+            ("G", (cube.cube[RubikCube.GREEN][5], cube.cube[RubikCube.GREEN][8])),
+            ("W", (cube.cube[RubikCube.WHITE][6])),
         ),
         "BO": (
-            ("B", (cube.cube[Cube.BLUE][3], cube.cube[Cube.BLUE][6])),
-            ("O", (cube.cube[Cube.ORANGE][5], cube.cube[Cube.ORANGE][8])),
-            ("W", (cube.cube[Cube.WHITE][0])),
+            ("B", (cube.cube[RubikCube.BLUE][3], cube.cube[RubikCube.BLUE][6])),
+            ("O", (cube.cube[RubikCube.ORANGE][5], cube.cube[RubikCube.ORANGE][8])),
+            ("W", (cube.cube[RubikCube.WHITE][0])),
         ),
     }
 
@@ -69,11 +69,11 @@ def f2l_solved(cube: Cube, pair: str):
     return True
 
 
-def get_top_edges(cube: Cube):
+def get_top_edges(cube: RubikCube):
     edge_list = []
 
     for index in top_edges_index:
-        top_color = cube.cube[Cube.YELLOW][index]
+        top_color = cube.cube[RubikCube.YELLOW][index]
         edge_face_index = top_edges_dict[index]
         edge_color = cube.cube[edge_face_index][1]
         edge = top_color + edge_color
@@ -84,11 +84,11 @@ def get_top_edges(cube: Cube):
     return edge_list
 
 
-def get_top_corners(cube: Cube):
+def get_top_corners(cube: RubikCube):
     corner_list = []
 
     for top_index, side_index_1, side_index_2 in top_corners_pairs:
-        top_color = cube.cube[Cube.YELLOW][top_index]
+        top_color = cube.cube[RubikCube.YELLOW][top_index]
 
         corner_face_index_1 = top_corners_dict[top_index][0]
         corner_color_1 = cube.cube[corner_face_index_1][side_index_1]
@@ -104,20 +104,20 @@ def get_top_corners(cube: Cube):
     return corner_list
 
 
-def get_top_side_pairs(cube: Cube):
+def get_top_side_pairs(cube: RubikCube):
     edge_pairs = get_top_edges(cube)
     corner_pairs = get_top_corners(cube)
 
     return edge_pairs, corner_pairs
 
 
-def get_bot_edges(cube: Cube):
+def get_bot_edges(cube: RubikCube):
     edge_dict = {}
     bottom_edge_sides = (
-        (Cube.BLUE, Cube.RED, "BR"),
-        (Cube.RED, Cube.GREEN, "GR"),
-        (Cube.GREEN, Cube.ORANGE, "GO"),
-        (Cube.ORANGE, Cube.BLUE, "BO"),
+        (RubikCube.BLUE, RubikCube.RED, "BR"),
+        (RubikCube.RED, RubikCube.GREEN, "GR"),
+        (RubikCube.GREEN, RubikCube.ORANGE, "GO"),
+        (RubikCube.ORANGE, RubikCube.BLUE, "BO"),
     )
 
     for side_1, side_2, key in bottom_edge_sides:
@@ -130,19 +130,19 @@ def get_bot_edges(cube: Cube):
     return edge_dict
 
 
-def get_bot_corners(cube: Cube):
+def get_bot_corners(cube: RubikCube):
     corner_dict = {}
     bottom_corner_sides = (
-        (Cube.BLUE, Cube.RED, 2, "BR"),
-        (Cube.RED, Cube.GREEN, 8, "GR"),
-        (Cube.GREEN, Cube.ORANGE, 6, "GO"),
-        (Cube.ORANGE, Cube.BLUE, 0, "BO"),
+        (RubikCube.BLUE, RubikCube.RED, 2, "BR"),
+        (RubikCube.RED, RubikCube.GREEN, 8, "GR"),
+        (RubikCube.GREEN, RubikCube.ORANGE, 6, "GO"),
+        (RubikCube.ORANGE, RubikCube.BLUE, 0, "BO"),
     )
 
     for side_1, side_2, white_index, key in bottom_corner_sides:
         color_1 = cube.cube[side_1][8]
         color_2 = cube.cube[side_2][6]
-        color_3 = cube.cube[Cube.WHITE][white_index]
+        color_3 = cube.cube[RubikCube.WHITE][white_index]
         corner_colors = color_1 + color_2 + color_3
         if "W" in corner_colors and not f2l_solved(cube, key):
             corner_colors = corner_colors.replace("W", "")
@@ -152,7 +152,7 @@ def get_bot_corners(cube: Cube):
     return corner_dict
 
 
-def solve_f2l_top(cube: Cube, pair: str):
+def solve_f2l_top(cube: RubikCube, pair: str):
     f2l_moves = json.loads(open("./algorithms/top_f2l.json").read())
     f2l_moves = [move.split() for move in f2l_moves]
     for move in f2l_moves:
@@ -167,7 +167,7 @@ def solve_f2l_top(cube: Cube, pair: str):
     return None
 
 
-def set_corner(corner: CornerPair, cube: Cube):
+def set_corner(corner: CornerPair, cube: RubikCube):
     for move in ["U", "U'", "U2"]:
         saved_cube = deepcopy(cube)
         saved_cube.move([move])
@@ -178,7 +178,7 @@ def set_corner(corner: CornerPair, cube: Cube):
     return None
 
 
-def f2l_case1(cube: Cube):
+def f2l_case1(cube: RubikCube):
     final_move_list = []
 
     saved_cube = deepcopy(cube)
@@ -215,7 +215,7 @@ def f2l_case1(cube: Cube):
     return final_move_list
 
 
-def f2l_case2(cube: Cube):
+def f2l_case2(cube: RubikCube):
     top_edges = get_top_edges(cube)
     bot_corners = get_bot_corners(cube)
 
@@ -242,7 +242,7 @@ def f2l_case2(cube: Cube):
     return final_move_list
 
 
-def f2l_case3(cube: Cube):
+def f2l_case3(cube: RubikCube):
     bot_edges = get_bot_edges(cube)
     top_corners = get_top_corners(cube)
     final_move_list = []
@@ -268,7 +268,7 @@ def f2l_case3(cube: Cube):
     return final_move_list
 
 
-def test_all_f2l_cases(cube: Cube):
+def test_all_f2l_cases(cube: RubikCube):
     f2l_cases = (f2l_case2, f2l_case3, f2l_case1)
     for f2l_case in f2l_cases:
         f2l_move_list = f2l_case(cube)
@@ -278,7 +278,7 @@ def test_all_f2l_cases(cube: Cube):
 
 
 def get_f2l_pairs(
-    cube: Cube,
+    cube: RubikCube,
 ) -> list[str]:
     pair_list = ["BR", "GR", "GO", "BO"]
     pairs = []
@@ -289,7 +289,7 @@ def get_f2l_pairs(
     return pairs
 
 
-def move_f2l(cube: Cube):
+def move_f2l(cube: RubikCube):
     pair_list = ["BR", "GR", "GO", "BO"]
     solved_pairs = get_f2l_pairs(cube)
 
@@ -312,7 +312,7 @@ def move_f2l(cube: Cube):
                 return set_moves
 
 
-def all_f2l_solved(cube: Cube):
+def all_f2l_solved(cube: RubikCube):
     pair_list = ["BR", "GR", "GO", "BO"]
     for pair in pair_list:
         if not f2l_solved(cube, pair):
@@ -321,7 +321,7 @@ def all_f2l_solved(cube: Cube):
 
 
 # in case edges and corners are not properly placed, we mix them a bit to have a f2l solution
-def mix_f2l(cube: Cube) -> list[str]:
+def mix_f2l(cube: RubikCube) -> list[str]:
     pair_list = ["BR", "BO", "GO", "GR"]
     solved_pairs = get_f2l_pairs(cube)
     move = ["R", "U", "R'"]
@@ -344,7 +344,7 @@ def mix_f2l(cube: Cube) -> list[str]:
     return final_move_list
 
 
-def solve(cube: Cube) -> list[str]:
+def solve(cube: RubikCube) -> list[str]:
     saved_cube = deepcopy(cube)
     final_move_list = []
 

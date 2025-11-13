@@ -1,10 +1,10 @@
 import json
 from copy import deepcopy
 
-from cube import Cube
+from cube import RubikCube
 
 
-def solve(cube: Cube) -> list[str]:
+def solve(cube: RubikCube) -> list[str]:
     pll_moves = json.loads(open("./algorithms/PLL.json").read())
     pll_moves = [pll.split() for pll in pll_moves]
 

@@ -2,7 +2,7 @@
 
 import argparse
 
-from cube import Cube, randomCube
+from cube import Corner, RubikCube, randomCube
 
 
 def main():
@@ -83,7 +83,7 @@ Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2
             if spin not in valid_spin:
                 parser.error(f"Invalid spin: {spin}")
 
-        cube = Cube()
+        cube = RubikCube()
         cube.move(spin_sequence)
 
     if args.display:
@@ -94,6 +94,10 @@ Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2
 
     if args.display:
         print(cube)
+
+    test = Corner()
+
+    print(test.check_faces_number())
 
 
 if __name__ == "__main__":

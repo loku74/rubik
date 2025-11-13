@@ -1,12 +1,12 @@
 import json
 from copy import deepcopy
 
-from cube import Cube
+from cube import RubikCube
 
 
-def solve(cube: Cube) -> list[str]:
-    def is_solved(test: Cube):
-        for color in test.cube[Cube.YELLOW]:
+def solve(cube: RubikCube) -> list[str]:
+    def is_solved(test: RubikCube):
+        for color in test.cube[RubikCube.YELLOW]:
             if color != "Y":
                 return False
         return True

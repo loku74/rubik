@@ -26,30 +26,80 @@ class FacePositions(Enum):
     DOWN = 5
 
 
-class Corner:
+class Cube:
+    _faces: dict[str, RubikColors]
+    _face_number: int
+
     def __init__(self):
-        pass
+        self._faces = {
+            "Front": RubikColors.UNKNOWN,
+            "Back": RubikColors.UNKNOWN,
+            "Left": RubikColors.UNKNOWN,
+            "Right": RubikColors.UNKNOWN,
+            "Up": RubikColors.UNKNOWN,
+            "Down": RubikColors.UNKNOWN,
+        }
+
+    def check_faces_number(self) -> bool:
+        colored_faces = 0
+        for face in self._faces:
+            if face != RubikColors.UNKNOWN:
+                colored_faces += 1
+
+        if colored_faces == self._face_number:
+            return True
+        return False
+
+    def check_faces_orientation(self) -> bool:
+        return True
+
+    def check_faces_color(self) -> bool:
+        return True
 
 
-class Edge:
+class Corner(Cube):
     def __init__(self):
-        pass
+        super().__init__()
+        _face_number = 3
+
+
+class Edge(Cube):
+    def __init__(self):
+        super().__init__()
+        _face_number = 2
 
 
 class Face:
+    __color: RubikColors
+    __position: FacePositions
+    __corners: dict[str, Corner]
+    __egdes: dict[str, Edge]
+
     def __init__(
         self,
         color: RubikColors = RubikColors.UNKNOWN,
         position: FacePositions = FacePositions.UNKNOWN,
     ):
-        self.color = color
-        self.position = position
+        self.__color = color
+        self.__position = position
+        self.__corners = {
+            "TopLeft": Corner(),
+            "TopRight": Corner(),
+            "BottomLeft": Corner(),
+            "BottomRight": Corner(),
+        }
+        self.__edges = {
+            "Left": Edge(),
+            "Right": Edge(),
+            "Top": Edge(),
+            "Bottom": Edge(),
+        }
 
 
 def randomCube(spins: int = 20):
     if spins < 1:
         raise Exception("Spins must be a positive, non-zero integer")
-    cube = Cube()
+    cube = RubikCube()
     k = 0
     moves = []
     while k < spins:
@@ -59,7 +109,7 @@ def randomCube(spins: int = 20):
     return cube, moves
 
 
-class Cube:
+class RubikCube:
     WHITE = 0
     YELLOW = 1
     RED = 2
@@ -384,22 +434,22 @@ class Cube:
         return moves
 
     def is_solved(self):
-        for color in self.cube[Cube.YELLOW]:
+        for color in self.cube[RubikCube.YELLOW]:
             if color != "Y":
                 return False
-        for color in self.cube[Cube.WHITE]:
+        for color in self.cube[RubikCube.WHITE]:
             if color != "W":
                 return False
-        for color in self.cube[Cube.ORANGE]:
+        for color in self.cube[RubikCube.ORANGE]:
             if color != "O":
                 return False
-        for color in self.cube[Cube.GREEN]:
+        for color in self.cube[RubikCube.GREEN]:
             if color != "G":
                 return False
-        for color in self.cube[Cube.BLUE]:
+        for color in self.cube[RubikCube.BLUE]:
             if color != "B":
                 return False
-        for color in self.cube[Cube.RED]:
+        for color in self.cube[RubikCube.RED]:
             if color != "R":
                 return False
 

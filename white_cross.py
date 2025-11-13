@@ -1,12 +1,12 @@
 from copy import deepcopy
 
-from cube import Cube
+from cube import RubikCube
 
 
-def first_step(cube: Cube):
-    white_side = cube.cube[Cube.WHITE]
+def first_step(cube: RubikCube):
+    white_side = cube.cube[RubikCube.WHITE]
     white_pieces = [white_side[1], white_side[3], white_side[5], white_side[7]]
-    yellow_side = cube.cube[Cube.YELLOW]
+    yellow_side = cube.cube[RubikCube.YELLOW]
     yellow_pieces = [yellow_side[1], yellow_side[3], yellow_side[5], yellow_side[7]]
     sum = 0
     for piece in white_pieces:
@@ -18,12 +18,12 @@ def first_step(cube: Cube):
     return sum == 4
 
 
-def second_step(cube: Cube):
-    blue_side = cube.cube[Cube.BLUE]
-    red_side = cube.cube[Cube.RED]
-    green_side = cube.cube[Cube.GREEN]
-    orange_side = cube.cube[Cube.ORANGE]
-    white_side = cube.cube[Cube.WHITE]
+def second_step(cube: RubikCube):
+    blue_side = cube.cube[RubikCube.BLUE]
+    red_side = cube.cube[RubikCube.RED]
+    green_side = cube.cube[RubikCube.GREEN]
+    orange_side = cube.cube[RubikCube.ORANGE]
+    white_side = cube.cube[RubikCube.WHITE]
     white_pieces = [white_side[1], white_side[3], white_side[5], white_side[7]]
     for piece in white_pieces:
         if piece != "W":
@@ -39,7 +39,7 @@ def second_step(cube: Cube):
     return True
 
 
-def do_step(cube: Cube, step, limit: int, cross: bool = False):
+def do_step(cube: RubikCube, step, limit: int, cross: bool = False):
     if step(cube):
         return []
 
@@ -55,8 +55,8 @@ def do_step(cube: Cube, step, limit: int, cross: bool = False):
                 return move_list
 
 
-def solve(cube: Cube):
-    def optimize_moves(cube: Cube, moves: list[str]):
+def solve(cube: RubikCube):
+    def optimize_moves(cube: RubikCube, moves: list[str]):
         i = 0
         while i < len(moves):
             saved_cube = deepcopy(cube)
