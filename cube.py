@@ -1,5 +1,6 @@
 from enum import Enum
 from random import choices
+from typing import List
 
 import numpy as np
 
@@ -27,11 +28,12 @@ class FacePositions(Enum):
 
 
 class Cube:
-    _faces: dict[str, RubikColors]
+    faces: dict[str, RubikColors]
     _face_number: int
+    _valid_colors: List[List[RubikColors]]
 
     def __init__(self):
-        self._faces = {
+        self.faces = {
             "Front": RubikColors.UNKNOWN,
             "Back": RubikColors.UNKNOWN,
             "Left": RubikColors.UNKNOWN,
@@ -40,33 +42,100 @@ class Cube:
             "Down": RubikColors.UNKNOWN,
         }
 
-    def check_faces_number(self) -> bool:
-        colored_faces = 0
-        for face in self._faces:
+    def checkfaces_number(self) -> bool:
+        colors_list = []
+        for face in self.faces.values():
             if face != RubikColors.UNKNOWN:
-                colored_faces += 1
+                colors_list.append(face)
 
-        if colored_faces == self._face_number:
+        if len(list(set(colors_list))) == self._face_number:
             return True
         return False
 
-    def check_faces_orientation(self) -> bool:
+    def checkfaces_orientation(self) -> bool:
+        if (
+            self.faces["Front"] != RubikColors.UNKNOWN
+            and self.faces["Back"] != RubikColors.UNKNOWN
+        ):
+            return False
+        elif (
+            self.faces["Left"] != RubikColors.UNKNOWN
+            and self.faces["Right"] != RubikColors.UNKNOWN
+        ):
+            return False
+        elif (
+            self.faces["Up"] != RubikColors.UNKNOWN
+            and self.faces["Down"] != RubikColors.UNKNOWN
+        ):
+            return False
         return True
 
-    def check_faces_color(self) -> bool:
-        return True
+    @staticmethod
+    def __compare_to_valid_color_scheme(
+        colors: List[RubikColors], valid_colors: List[List[RubikColors]]
+    ) -> bool:
+        for valid_color_scheme in valid_colors:
+            color_checked = 0
+            for color in colors:
+                if color not in valid_color_scheme:
+                    break
+                color_checked += 1
+                if color_checked == len(colors):
+                    return True
+        return False
+
+    def checkfaces_color(self) -> bool:
+        colors_list = []
+        for face in self.faces.values():
+            if face != RubikColors.UNKNOWN:
+                colors_list.append(face)
+
+        return self.__compare_to_valid_color_scheme(colors_list, self._valid_colors)
+
+    def check(self):
+        if (
+            self.checkfaces_color()
+            and self.checkfaces_orientation()
+            and self.checkfaces_number()
+        ):
+            return True
+        return False
 
 
 class Corner(Cube):
     def __init__(self):
         super().__init__()
-        _face_number = 3
+        self._face_number = 3
+        self._valid_colors = [
+            [RubikColors.WHITE, RubikColors.BLUE, RubikColors.ORANGE],
+            [RubikColors.WHITE, RubikColors.ORANGE, RubikColors.GREEN],
+            [RubikColors.WHITE, RubikColors.RED, RubikColors.GREEN],
+            [RubikColors.WHITE, RubikColors.RED, RubikColors.BLUE],
+            [RubikColors.YELLOW, RubikColors.ORANGE, RubikColors.BLUE],
+            [RubikColors.YELLOW, RubikColors.GREEN, RubikColors.ORANGE],
+            [RubikColors.YELLOW, RubikColors.RED, RubikColors.GREEN],
+            [RubikColors.YELLOW, RubikColors.RED, RubikColors.BLUE],
+        ]
 
 
 class Edge(Cube):
     def __init__(self):
         super().__init__()
         _face_number = 2
+        self._valid_colors = [
+            [RubikColors.WHITE, RubikColors.BLUE],
+            [RubikColors.WHITE, RubikColors.ORANGE],
+            [RubikColors.WHITE, RubikColors.GREEN],
+            [RubikColors.WHITE, RubikColors.RED],
+            [RubikColors.YELLOW, RubikColors.ORANGE],
+            [RubikColors.YELLOW, RubikColors.GREEN],
+            [RubikColors.YELLOW, RubikColors.RED],
+            [RubikColors.YELLOW, RubikColors.BLUE],
+            [RubikColors.ORANGE, RubikColors.GREEN],
+            [RubikColors.ORANGE, RubikColors.BLUE],
+            [RubikColors.RED, RubikColors.BLUE],
+            [RubikColors.RED, RubikColors.GREEN],
+        ]
 
 
 class Face:
