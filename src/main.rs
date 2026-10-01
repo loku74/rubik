@@ -4,6 +4,8 @@ use clap::{ArgGroup, CommandFactory, Parser};
 use rubik::Cube;
 use rubik::moves::{format_moves, parse_moves};
 
+mod clipboard;
+
 /// Rubik's Cube solver - Apply spin sequences or generate random cubes
 #[derive(Parser)]
 #[command(
@@ -14,6 +16,7 @@ Examples:
   rubik --random
   rubik --random 30
   rubik -r 50
+  rubik -r -c
 
 Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2"
 )]
@@ -35,6 +38,10 @@ struct Args {
     /// Display the cube
     #[arg(short, long)]
     display: bool,
+
+    /// Copy the solution to the clipboard
+    #[arg(short, long)]
+    copy: bool,
 }
 
 fn main() {
@@ -62,12 +69,18 @@ fn main() {
         println!("{cube}");
     }
 
-    let solution = cube.solve();
+    let solution = format_moves(&cube.solve());
     println!(
-        "Solution: {} [{} spins]",
-        format_moves(&solution),
-        solution.len()
+        "Solution: {solution} [{} spins]",
+        solution.split_whitespace().count()
     );
+
+    if args.copy {
+        match clipboard::copy(&solution) {
+            Ok(()) => println!("Solution copied to the clipboard"),
+            Err(e) => eprintln!("warning: {e}"),
+        }
+    }
 
     if args.display {
         println!("{cube}");

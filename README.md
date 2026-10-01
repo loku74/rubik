@@ -42,6 +42,12 @@ cargo run --release -- -r 42
 cargo run --release -- -r -d
 ```
 
+### Copy the solution to the clipboard
+```bash
+cargo run --release -- -r -c
+```
+Uses `pbcopy` on macOS, `clip` on Windows and `wl-copy`, `xclip` or `xsel` on Linux.
+
 ### Valid Moves
 Each face can be rotated clockwise (no suffix), counterclockwise ('), or 180° (2). Supported faces:
 - **U** - Upper face
