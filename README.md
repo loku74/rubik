@@ -18,7 +18,7 @@ The binary is written to `target/release/rubik`.
 ## Usage
 
 ```
-rubik "<spin_sequence>" | --random [SPINS] [--display]
+rubik "<spin_sequence>" | --random [SPINS] [--display] [--copy] [--visual]
 ```
 
 ## Examples
@@ -47,6 +47,24 @@ cargo run --release -- -r -d
 cargo run --release -- -r -c
 ```
 Uses `pbcopy` on macOS, `clip` on Windows and `wl-copy`, `xclip` or `xsel` on Linux.
+
+### Watch the cube in 3D
+```bash
+cargo run --release -- -r -v
+```
+Opens a window that plays the scramble on a solved cube, then the solution, animating every turn. The current move is highlighted in the move list.
+
+| Control | Action |
+| --- | --- |
+| `Space` | Play / pause (restarts once solved) |
+| `←` / `→` | Step one move back / forward |
+| `↑` / `↓` | Faster / slower |
+| `S` | Skip the scramble |
+| `R` | Restart |
+| Mouse drag / wheel | Orbit / zoom |
+| `Esc` / `Q` | Quit |
+
+The renderer uses [macroquad](https://github.com/not-fl3/macroquad), which loads OpenGL at runtime, so no system libraries are needed to build.
 
 ### Valid Moves
 Each face can be rotated clockwise (no suffix), counterclockwise ('), or 180° (2). Supported faces:

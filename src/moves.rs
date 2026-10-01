@@ -69,6 +69,11 @@ impl Move {
         Move { face, turns }
     }
 
+    /// The turn that undoes this one.
+    pub const fn inverse(self) -> Move {
+        Move::new(self.face, 4 - self.turns)
+    }
+
     /// Rotation matrix applied to every sticker of the turned layer.
     pub fn matrix(self) -> Mat3 {
         Mat3::quarter_turn(self.face.normal()).pow(self.turns)

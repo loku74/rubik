@@ -5,6 +5,7 @@ use rubik::Cube;
 use rubik::moves::{format_moves, parse_moves};
 
 mod clipboard;
+mod visualizer;
 
 /// Rubik's Cube solver - Apply spin sequences or generate random cubes
 #[derive(Parser)]
@@ -17,6 +18,7 @@ Examples:
   rubik --random 30
   rubik -r 50
   rubik -r -c
+  rubik -r -v
 
 Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2"
 )]
@@ -42,25 +44,29 @@ struct Args {
     /// Copy the solution to the clipboard
     #[arg(short, long)]
     copy: bool,
+
+    /// Open a 3D window playing the scramble then the solution
+    #[arg(short, long)]
+    visual: bool,
 }
 
 fn main() {
     let args = Args::parse();
 
-    let mut cube = match (args.random, args.sequence) {
+    let (mut cube, scramble) = match (args.random, args.sequence) {
         (Some(spins), _) => {
             let (cube, moves) = Cube::random(spins as usize);
             let shuffle = format_moves(&moves);
             println!("Shuffle: {shuffle}");
             println!("{}", "-".repeat(shuffle.len() + 9));
-            cube
+            (cube, moves)
         }
         (None, Some(sequence)) => {
             let moves = parse_moves(&sequence)
                 .unwrap_or_else(|e| Args::command().error(ErrorKind::InvalidValue, e).exit());
             let mut cube = Cube::new();
             cube.apply_all(&moves);
-            cube
+            (cube, moves)
         }
         (None, None) => unreachable!("clap requires one of the inputs"),
     };
@@ -69,7 +75,8 @@ fn main() {
         println!("{cube}");
     }
 
-    let solution = format_moves(&cube.solve());
+    let moves = cube.solve();
+    let solution = format_moves(&moves);
     println!(
         "Solution: {solution} [{} spins]",
         solution.split_whitespace().count()
@@ -84,5 +91,9 @@ fn main() {
 
     if args.display {
         println!("{cube}");
+    }
+
+    if args.visual {
+        visualizer::run(scramble, moves);
     }
 }

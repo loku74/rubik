@@ -66,9 +66,9 @@ const STICKERS: usize = 54;
 /// Where a sticker lives in space: the center of its cubie (each coordinate in
 /// `{-1, 0, 1}`) and the outward normal of the face it is glued on.
 #[derive(Clone, Copy, PartialEq, Eq)]
-struct Sticker {
-    position: Vec3,
-    normal: Vec3,
+pub struct Sticker {
+    pub position: Vec3,
+    pub normal: Vec3,
 }
 
 /// Sticker `index` (0..9, row-major) of `face`.
@@ -170,6 +170,11 @@ impl Cube {
 
     pub fn get(&self, face: Face, index: usize) -> Color {
         self.stickers[slot(face, index)]
+    }
+
+    /// Every sticker with its place in space and its current color.
+    pub fn stickers(&self) -> impl Iterator<Item = (Sticker, Color)> + '_ {
+        (0..STICKERS).map(|slot| (sticker_at(slot), self.stickers[slot]))
     }
 
     pub fn apply(&mut self, m: Move) {
