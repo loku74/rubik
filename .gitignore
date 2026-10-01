@@ -1,5 +1,7 @@
-__pycache__
-bin
-include
-lib
-pyvenv.cfg
+/target
+.DS_Store
+
+# leftovers from the former Python version
+venv/
+__pycache__/
+.ropeproject/

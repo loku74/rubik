@@ -1,63 +1,45 @@
 # rubik
 
-A Python-based Rubik's cube solver that can solve any valid cube configuration using the CFOP method (Cross, F2L, OLL, PLL).
+A Rust Rubik's cube solver that can solve any valid cube configuration using the CFOP method (Cross, F2L, OLL, PLL).
 
 ## Installation
 
 ### Prerequisites
-- Python 3.11 or higher
-- pip (Python package manager)
+- [Rust](https://www.rust-lang.org/tools/install) (edition 2024, Rust 1.85 or higher)
 
-### Setup
+### Build
 
-1. Clone or download this repository to your local machine
+```bash
+cargo build --release
+```
 
-2. Navigate to the project directory:
-   ```bash
-   cd rubik
-   ```
-
-3. Create a virtual environment:
-   ```bash
-   python3 -m venv venv
-   ```
-
-4. Activate the virtual environment:
-   - On macOS/Linux:
-     ```bash
-     source venv/bin/activate
-     ```
-   - On Windows:
-     ```powershell
-     Scripts\activate
-     ```
-
-5. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+The binary is written to `target/release/rubik`.
 
 ## Usage
 
 ```
-python3 main.py "<spin_sequence>" | random | random:<spins>
+rubik "<spin_sequence>" | --random [SPINS] [--display]
 ```
-
 
 ## Examples
 ### Solve a specific sequence
 ```bash
-python3 main.py "R U2 F' D L2 B D' R' F2 U'"
+cargo run --release -- "R U2 F' D L2 B D' R' F2 U'"
 ```
 
 ### Generate and solve a random cube (20 random moves by default)
 ```bash
-python3 main.py random
+cargo run --release -- --random
 ```
 
 ### Generate and solve a random cube with specific number of moves
 ```bash
-python3 main.py random:42
+cargo run --release -- -r 42
+```
+
+### Display the cube before and after solving
+```bash
+cargo run --release -- -r -d
 ```
 
 ### Valid Moves
@@ -69,12 +51,20 @@ Each face can be rotated clockwise (no suffix), counterclockwise ('), or 180° (
 - **L** - Left face
 - **R** - Right face
 
-## Deactivating Virtual Environment
+## How moves work
 
-When you're done using the program, you can deactivate the virtual environment:
+Each sticker is described by the position of its cubie (`x`, `y`, `z` in `{-1, 0, 1}`) and the normal of the face it is glued on. A face turn is the 90° rotation matrix around that face's normal (`src/geometry.rs`), applied to every sticker of the layer. These rotations are turned into sticker permutation tables once at startup, so applying a move is a single table lookup per sticker.
+
+Whole-cube `y` rotations used in the algorithm files are resolved the same way: the inverse rotation matrix maps each face turn back to the face it actually affects.
+
+## Tests and benchmark
+
 ```bash
-deactivate
+cargo test --release
+cargo run --release --bin benchmark -- 1000
 ```
+
+The tests include reference states produced by the original Python implementation (`tests/fixtures/python_states.txt`).
 
 ## Algorithm Ressources
 - [F2L](https://www.cubeskills.com/uploads/pdf/tutorials/f2l.pdf)
