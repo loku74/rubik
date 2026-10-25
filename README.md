@@ -55,6 +55,12 @@ Each face can be rotated clockwise (no suffix), counterclockwise ('), or 180° (
 uv run benchmark.py
 ```
 
+## Type checking
+
+```bash
+uv run ty check
+```
+
 ## Algorithm Ressources
 - [F2L](https://www.cubeskills.com/uploads/pdf/tutorials/f2l.pdf)
 - [OLL](https://speedcubedb.com/a/3x3/OLL)
