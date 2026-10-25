@@ -11,10 +11,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 main.py "U R U' L'"
-  python3 main.py --random
-  python3 main.py --random 30
-  python3 main.py -r 50
+  uv run main.py "U R U' L'"
+  uv run main.py --random
+  uv run main.py --random 30
+  uv run main.py -r 50
 
 Valid spins: U, U', U2, D, D', D2, F, F', F2, B, B', B2, L, L', L2, R, R', R2
         """,
