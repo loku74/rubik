@@ -6,7 +6,7 @@ use std::f32::consts::FRAC_PI_2;
 use macroquad::prelude::*;
 
 use rubik::geometry::dot;
-use rubik::{Cube, Move};
+use rubik::{Cube, Face, Move};
 
 const BACKGROUND: Color = Color::new(0.11, 0.12, 0.15, 1.0);
 const BODY: Color = Color::new(0.06, 0.06, 0.07, 1.0);
@@ -19,6 +19,13 @@ const BODY_HALF: f32 = 0.49;
 const STICKER_HALF: f32 = 0.42;
 /// How far stickers float above the body, to avoid z-fighting.
 const STICKER_LIFT: f32 = 0.01;
+
+/// Ferris the crab, drawn on the white center.
+const FERRIS_SVG: &[u8] = include_bytes!("../assets/ferris.svg");
+/// Width of the rendered Ferris texture, in pixels.
+const FERRIS_PIXELS: u32 = 512;
+/// Half the width of Ferris on the sticker.
+const FERRIS_HALF: f32 = 0.38;
 
 const MIN_SPEED: f32 = 0.25;
 const MAX_SPEED: f32 = 30.0;
@@ -147,6 +154,7 @@ impl Player {
     }
 
     async fn run(mut self) {
+        let ferris = load_ferris();
         loop {
             if is_key_pressed(KeyCode::Escape) || is_key_pressed(KeyCode::Q) {
                 break;
@@ -157,6 +165,7 @@ impl Player {
             clear_background(BACKGROUND);
             set_camera(&self.orbit.camera());
             draw_mesh(&self.mesh());
+            draw_mesh(&self.ferris_mesh(&ferris));
             set_default_camera();
             self.draw_hud();
 
@@ -320,6 +329,47 @@ impl Player {
         mesh
     }
 
+    /// Ferris on the white (D) center, following the D turns.
+    fn ferris_mesh(&self, texture: &Texture2D) -> Mesh {
+        // Center stickers keep no orientation in `Cube`, so count the D turns
+        // already played to know how far Ferris has spun.
+        let d_turns: u32 = self.moves[..self.done]
+            .iter()
+            .filter(|m| m.face == Face::D)
+            .map(|m| m.turns as u32)
+            .sum();
+        let spin = Quat::from_axis_angle(Vec3::NEG_Y, -FRAC_PI_2 * (d_turns % 4) as f32);
+        let rotation = match &self.turn {
+            Some(turn) if turn.m.face == Face::D => turn.rotation() * spin,
+            _ => spin,
+        };
+
+        let normal = Vec3::NEG_Y;
+        let center = normal * (1.5 + 2.0 * STICKER_LIFT);
+        // Seen from outside the face, `right` × `up` points outward, so Ferris
+        // isn't mirrored.
+        let right = Vec3::X * FERRIS_HALF;
+        let up = Vec3::Z * FERRIS_HALF * texture.height() / texture.width();
+        let eye = self.orbit.eye().normalize();
+        let light = 0.55 + 0.45 * (rotation * normal).dot(eye).max(0.0);
+        let shade = Color::new(light, light, light, 1.0);
+
+        let corners = [
+            (center - right + up, vec2(0.0, 0.0)),
+            (center + right + up, vec2(1.0, 0.0)),
+            (center + right - up, vec2(1.0, 1.0)),
+            (center - right - up, vec2(0.0, 1.0)),
+        ];
+        Mesh {
+            vertices: corners
+                .iter()
+                .map(|&(corner, uv)| Vertex::new2(rotation * corner, uv, shade))
+                .collect(),
+            indices: vec![0, 1, 2, 0, 2, 3],
+            texture: Some(texture.clone()),
+        }
+    }
+
     fn draw_hud(&self) {
         let margin = 20.0;
         let solving = self.done > self.scramble_len
@@ -414,4 +464,34 @@ fn push_quad(
             .push(Vertex::new2(rotation * corner, Vec2::ZERO, shaded));
     }
     mesh.indices.extend([0, 1, 2, 0, 2, 3].map(|i| base + i));
+}
+
+/// Renders the Ferris SVG into a texture.
+fn load_ferris() -> Texture2D {
+    use resvg::{tiny_skia, usvg};
+
+    let tree = usvg::Tree::from_data(FERRIS_SVG, &usvg::Options::default())
+        .expect("the bundled Ferris SVG is valid");
+    let size = tree.size();
+    let scale = FERRIS_PIXELS as f32 / size.width();
+    let height = (size.height() * scale).ceil() as u32;
+    let mut pixmap = tiny_skia::Pixmap::new(FERRIS_PIXELS, height).expect("non-empty size");
+    resvg::render(
+        &tree,
+        tiny_skia::Transform::from_scale(scale, scale),
+        &mut pixmap.as_mut(),
+    );
+
+    // tiny-skia stores premultiplied alpha, macroquad expects straight alpha.
+    let bytes: Vec<u8> = pixmap
+        .pixels()
+        .iter()
+        .flat_map(|p| {
+            let c = p.demultiply();
+            [c.red(), c.green(), c.blue(), c.alpha()]
+        })
+        .collect();
+    let texture = Texture2D::from_rgba8(FERRIS_PIXELS as u16, height as u16, &bytes);
+    texture.set_filter(FilterMode::Linear);
+    texture
 }
